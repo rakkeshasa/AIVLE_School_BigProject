@@ -1,5 +1,6 @@
 import '../App.css'
 import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
     let navi = useNavigate()
@@ -19,12 +20,30 @@ function Login() {
         <div className='form-box'>
             <div className='form-box01'>
                 <div className='form-text'>ID</div>
-                <input type='text' className='form-field' placeholder='아이디'></input>
+                <input type='text' className='form-field' placeholder='아이디' id='id'></input>
                 <div className='form-text'>Password</div>
-                <input type='password' className='form-field' placeholder='비밀번호'></input>
+                <input type='password' className='form-field' placeholder='비밀번호' id='pw'></input>
             </div>
             <div className='form-box02'>
-                <button>Login</button>
+                <button onClick={()=>{
+                    console.log(document.querySelectorAll('.form-box01 input')[0].value,document.querySelectorAll('.form-box01 input')[1].value);
+                    // axios.post('http://127.0.0.1:8000/test',
+                    //     {
+                    //         id : document.querySelectorAll('.form-box01 input')[0].value,
+                    //         pwd : document.querySelectorAll('.form-box01 input')[1].value
+                    //     }
+                    // )
+                    // .then(res => console.log(res))
+                    axios({
+                        method: 'post',
+                        url: 'http://127.0.0.1:8000/post',
+                        data: {
+                            'id' : document.querySelectorAll('.form-box01 input')[0].value,
+                            'pwd' : document.querySelectorAll('.form-box01 input')[1].value
+                        }
+
+                    }).then(res => console.log(res))
+                }}>Login</button>
                 <button>Create account</button>
             </div>
         </div>

@@ -24,9 +24,9 @@ function Main() {
                 }}>Login</div>
             <div className="loginjoin-btn" onClick={()=>{
                 axios({
-                    method: 'get',
+                    method: 'post',
                     url: 'http://127.0.0.1:8000/test',
-                    data: 'hello'
+                    params: 'hello'
                 }).then(result=>console.log(result))
             }}>Join</div>
         </div>
