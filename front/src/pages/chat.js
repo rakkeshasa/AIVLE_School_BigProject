@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 function Chat(props) {
     let navi = useNavigate();
-    console.log(props.filename);
     return (
         <div className='wrapper'> < div > <div className = "navi"> <div className="loginjoin-btn-box">
             <div
@@ -23,7 +22,7 @@ function Chat(props) {
         <div className='chat-plus-text01'>+ New Chat</div>
         <div className='chat-plus-text02'>Drop MP4 here</div>
     </div>
-    <div></div>
+    <div className='file-title'>{props.filename}</div>
 </div>
 </div>
     );

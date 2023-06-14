@@ -400,3 +400,17 @@
 #new-chat{
   display: none;
 }
+
+.file-title{
+  margin: 20px;
+  width: 85%;
+  height: 5%;
+  color: white;
+  background-color: #1677FF;
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: small;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
