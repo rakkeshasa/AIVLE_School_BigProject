@@ -22,13 +22,12 @@ function Main() {
                 onClick={() => {
                     navi("/login");
                 }}>Login</div>
-            <div className="loginjoin-btn" onClick={()=>{
-                axios({
-                    method: 'post',
-                    url: 'http://127.0.0.1:8000/test',
-                    params: 'hello'
-                }).then(result=>console.log(result))
-            }}>Join</div>
+            <div 
+                className="loginjoin-btn"
+                onClick={() => {
+                    navi("/join");
+                }}
+            >Join</div>
         </div>
     </div>
     <div className="title-box">
