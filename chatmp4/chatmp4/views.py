@@ -24,17 +24,17 @@ def login_view(request):
             context = {
             "result": "로그인 성공"
             }
-            return redirect('/')
+            return HttpResponse('login')
         else:
             request.session['loginOk'] = False
             context = {
                 "result": "비밀번호가 맞지 않습니다."
             }
+            return HttpResponse('wrong pwd')
     else:
         request.session['loginOk'] = False
         context = {
             "result": "존재하지 않는 id입니다."
         }
-    return HttpResponse(json.dumps(context), content_type="application/json")
-            # return HttpResponse("failed")
+    return HttpResponse('failed')
             
