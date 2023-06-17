@@ -11,13 +11,7 @@ function Main(props) {
                 onClick={() => {
                     navi("/login");
                 }}>Login</div>
-            <div className="loginjoin-btn" onClick={()=>{
-                axios({
-                    method: 'post',
-                    url: 'http://127.0.0.1:8000/test',
-                    params: 'hello'
-                }).then(result=>console.log(result))
-            }}>Join</div>
+            <div className="loginjoin-btn">Join</div>
         </div>
     </div>
     <div className="title-box">
@@ -28,6 +22,13 @@ function Main(props) {
         <div className="upload-innner-box">
             <input type='file' id='upload' 
             onChange={(e)=>{
+                const formData = new FormData()
+                formData.append('video', e.currentTarget.files)
+                axios({
+                    method: 'post',
+                    url: 'http://127.0.0.1:8000/videoUpload',
+                    data: formData,
+                }).then(res => res ? props.setUpload(1) : props.setUpload(0))
                 props.setFilename(e.currentTarget.files[0].name);
                 navi('/chat')
             }}
