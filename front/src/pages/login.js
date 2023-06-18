@@ -14,6 +14,11 @@ function Login() {
                 }}>Home</div>
             <div className="loginjoin-btn"
             >Join</div>
+            <div 
+                className="loginjoin-btn"
+                onClick={() => {
+                    navi("/join");
+                }}>Join</div>
         </div>
     </div>
     <div className='login-box'>
@@ -46,7 +51,9 @@ function Login() {
 
                     }).then(res => console.log(res))
                 }}>Login</button>
-                <button>Create account</button>
+                <button onClick={() => {
+                    navi("/join");
+                }}>Create account</button>
             </div>
         </div>
     </div>
