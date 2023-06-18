@@ -3,6 +3,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Main from './pages/main';
 import Login from './pages/login';
 import Chat from './pages/chat';
+import Join from './pages/join';
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
                     <Route path='/' element={<Main/>}/>
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/chat' element={<Chat/>}/>
+                    <Route path='/join' element={<Join/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
