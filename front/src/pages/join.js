@@ -27,7 +27,7 @@ function Join() {
     const handleSubmit = () => {
         axios({ 
             method: 'post',
-            url: 'http://127.0.0.1:8000/post',
+            url: 'http://127.0.0.1:8000/join',
             data: {
                 'name' : name,
                 'id' : email,
