@@ -3,11 +3,15 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from home.models import User
 
-def test(request) : 
+
+
+def test(request) :
     return HttpResponse("hello world")
 
+
+
 @csrf_exempt
-def login(request) : 
+def login(request) :
     if request.method == 'POST':
         data = json.loads(request.body)
         print(data)
@@ -25,38 +29,47 @@ def login(request) :
         except User.DoesNotExist:
             return HttpResponse("User does not exist!")
 
+
+
+
 # 파일 업로드
+
 @csrf_exempt
 def videoUpload(request):
-    if request.method == 'POST':
-        title = request.POST['video']
-        uploadFile = request.FILES['file']
+    if request.method == 'POST' and request.FILES['video']:
+        uploadFile = request.FILES['video']
         print(uploadFile)
         # id = request.POST['userId']
         # video_title = request.POST['videoTitle']
         # video_address = request.POST['videoAddress']
         # upload_date = request.POST['uploadDate']
+        return HttpResponse('hello world')
 
-        try: # db저장
-            user = User.objects.get(id=user_id)
-            video = Video(
-                id=user,
-                video_title=video_title,
-                video_addr=video_address,
-                upload_date=upload_date
-            )
-            video.save()
-            return JsonResponse({'message': 'File uploaded successfully.'})
-        except User.DoesNotExist:
-            return JsonResponse({'message': 'User does not exist.'})
-        except Exception as e:
-            return JsonResponse({'message': 'Error occurred while uploading file.'})
+    #     try: # db저장
+    #         user = User.objects.get(id=user_id)
+    #         video = Video(
+    #             id=user,
+    #             video_title=video_title,
+    #             video_addr=video_address,
+    #             upload_date=upload_date
+    #         )
+    #         video.save()
+    #         return JsonResponse({'message': 'File uploaded successfully.'})
+    #     except User.DoesNotExist:
+    #         return JsonResponse({'message': 'User does not exist.'})
+    #     except Exception as e:
+    #         return JsonResponse({'message': 'Error occurred while uploading file.'})
 
-    else:
-        return JsonResponse({'message': 'File upload failed.'})
+
+    # else:
+    #     return JsonResponse({'message': 'File upload failed.'})
+
+
+
 
 
 # 회원가입
+
 @csrf_exempt          
 def signup(request):
     data = json.loads(request.body)

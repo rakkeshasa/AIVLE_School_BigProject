@@ -29,6 +29,10 @@ class Video(models.Model):
         managed = False
         db_table = 'video'
 
+    class Meta:
+        managed = False
+        db_table = 'video'
+        
     def __str__(self):
         return self.video_title
 
@@ -43,6 +47,5 @@ class Post(models.Model):
     class Meta:
         managed = False
         db_table = 'post'
-
     def __str__(self):
         return self.post_title
