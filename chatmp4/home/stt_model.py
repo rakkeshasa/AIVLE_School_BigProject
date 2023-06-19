@@ -3,7 +3,7 @@ import openai
 
 def STT(audio_path, output_path):
     # 키 인증
-    openai.api_key = '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'
+    openai.api_key = ''
     # 현재 파일 경로
     current = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_path = os.path.join(current, 'media/text')
