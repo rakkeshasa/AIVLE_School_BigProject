@@ -37,4 +37,22 @@ def login_view(request):
             "result": "존재하지 않는 id입니다."
         }
     return HttpResponse('failed')
-            
+  
+@csrf_exempt          
+def signup(request):
+    data = json.loads(request.body)
+    if User.objects.filter(email=data['id']).exists():
+        context={
+            'result': '이미 존재하는 아이디입니다.'
+        }
+        return HttpResponse('already exists')
+    else:
+        User.objects.create(
+            email = data['id'],
+            name = data['name'],
+            password = data['pwd'],
+        ).save()
+        context={
+            'result':'signup'
+        }
+        return HttpResponse('signup')
