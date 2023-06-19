@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
-from home.models import User
+from home.models import User, Post
 import json
 
 def test(request) : 
@@ -56,3 +56,12 @@ def signup(request):
             'result':'signup'
         }
         return HttpResponse('signup')
+    
+def post(request):
+    postlist = Post.objects.all()
+        
+    return render(request, 'blog.html', {'postlist': postlist})
+
+def posting(request, pk):
+    post = Post.objects.get(pk=pk)
+    return render(request, 'posting.html', {'post':post})

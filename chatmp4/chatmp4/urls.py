@@ -8,4 +8,6 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name='index.html'),name='index'),
     path("test", views.test),
     path("post", views.signup),
+    path("blog/", views.post),
+    path('blog/<int:pk>/', views.posting, name="posting"),
 ]
