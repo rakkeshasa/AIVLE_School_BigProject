@@ -8,13 +8,13 @@ import json
 def test(request) : 
     return HttpResponse("hello world")
 
-@csrf_exempt
+
 def post(request) : 
     data = json.loads(request.body)
     print(data['pwd'])
     return HttpResponse("login page")
 
-@csrf_exempt
+
 def login_view(request):
     data = json.loads(request.body)
     if User.objects.filter(email = data['id']).exists():
@@ -38,7 +38,7 @@ def login_view(request):
         }
     return HttpResponse('failed')
   
-@csrf_exempt          
+         
 def signup(request):
     data = json.loads(request.body)
     if User.objects.filter(email=data['id']).exists():

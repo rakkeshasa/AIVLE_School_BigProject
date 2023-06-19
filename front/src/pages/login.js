@@ -2,6 +2,9 @@ import '../App.css'
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
 function Login() {
     let navi = useNavigate()
 
@@ -48,7 +51,7 @@ function Login() {
                                     method: 'post',
                                     url: 'http://127.0.0.1:8000/post',
                                     data: {
-                                        'email' : document.querySelectorAll('.form-box01 input')[0].value,
+                                        'id' : document.querySelectorAll('.form-box01 input')[0].value,
                                         'pwd' : document.querySelectorAll('.form-box01 input')[1].value
                                     }
                                 }).then(res => console.log(res))

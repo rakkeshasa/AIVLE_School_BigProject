@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
 function Join() {
     let navi = useNavigate()
     const [name, setName] = useState('');
