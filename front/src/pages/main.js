@@ -23,10 +23,14 @@ function Main(props) {
             <input type='file' id='upload' 
             onChange={(e)=>{
                 const formData = new FormData()
-                formData.append('video', e.currentTarget.files)
+                formData.append('video', e.currentTarget.files[0])
+                formData.append('title', 'title')
                 axios({
+                    headers: {
+                        "Content-Type": "multipart/form-data" // enctype 설정
+                      },
                     method: 'post',
-                    url: 'http://127.0.0.1:8000/videoUpload',
+                    url: 'http://127.0.0.1:8000/video',
                     data: formData,
                 }).then(res => res ? props.setUpload(1) : props.setUpload(0))
                 props.setFilename(e.currentTarget.files[0].name);
