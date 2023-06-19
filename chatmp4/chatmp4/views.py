@@ -2,7 +2,7 @@ from django.http import HttpResponse ,JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 from home.models import User
-
+import os
 
 
 def test(request) :
@@ -30,19 +30,28 @@ def login(request) :
             return HttpResponse("User does not exist!")
 
 
-
-
 # 파일 업로드
 
 @csrf_exempt
 def videoUpload(request):
     if request.method == 'POST' and request.FILES['video']:
         uploadFile = request.FILES['video']
+        current = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        folder_path = os.path.join(current, 'media/')
+        os.makedirs(folder_path, exist_ok=True) # 폴더 생성
+
+        file_path = os.path.join(folder_path, str(uploadFile)) # uploadFile => title
+        with open(file_path, 'wb') as destination:
+            for chunk in uploadFile.chunks():
+                destination.write(chunk)
+
+
         print(uploadFile)
-        # id = request.POST['userId']
-        # video_title = request.POST['videoTitle']
-        # video_address = request.POST['videoAddress']
-        # upload_date = request.POST['uploadDate']
+        id = request.POST['userId']
+        
+        video_title = request.POST['videoTitle']
+        video_address = request.POST['videoAddress']
+        upload_date = request.POST['uploadDate']
         return HttpResponse('hello world')
 
     #     try: # db저장
