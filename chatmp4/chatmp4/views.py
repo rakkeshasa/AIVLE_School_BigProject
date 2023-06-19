@@ -1,5 +1,5 @@
 from django.http import HttpResponse ,JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 import json
 from home.models import User
 import os
@@ -7,7 +7,6 @@ import os
 
 def test(request) :
     return HttpResponse("hello world")
-
 
 
 @csrf_exempt
@@ -31,7 +30,6 @@ def login(request) :
 
 
 # 파일 업로드
-
 @csrf_exempt
 def videoUpload(request):
     if request.method == 'POST' and request.FILES['video']:
@@ -79,7 +77,7 @@ def videoUpload(request):
 
 # 회원가입
 
-@csrf_exempt          
+@csrf_exempt       
 def signup(request):
     data = json.loads(request.body)
     if User.objects.filter(email=data['id']).exists():
