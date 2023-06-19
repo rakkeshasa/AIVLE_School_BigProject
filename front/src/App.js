@@ -4,7 +4,7 @@ import Main from './pages/main';
 import Login from './pages/login';
 import Join from './pages/join';
 import Chat from './pages/chat';
-import Join from './pages/join';
+
 
 function App() {
     return (

@@ -34,13 +34,6 @@ function Login() {
                 <button onClick={()=>{
                     console.log(document.querySelectorAll('.form-box01 input')[0].value,
                             document.querySelectorAll('.form-box01 input')[1].value);
-                    // axios.post('http://127.0.0.1:8000/test',
-                    //     {
-                    //         id : document.querySelectorAll('.form-box01 input')[0].value,
-                    //         pwd : document.querySelectorAll('.form-box01 input')[1].value
-                    //     }
-                    // )
-                    // .then(res => console.log(res))
                     axios({
                         method: 'post',
                         url: 'http://127.0.0.1:8000/post',

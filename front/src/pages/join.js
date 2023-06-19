@@ -1,11 +1,45 @@
 import '../App.css'
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useState } from 'react';
 
 function Join() {
     let navi = useNavigate()
-    return (
-        <> 
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [pwd, setPwd] = useState('');
+
+    const handleNameChange = (event) =>{
+        setName(event.target.value);
+    }
+
+    const handleEmailChange = (event) =>{
+        setEmail(event.target.value);
+    }
+
+    const handlePwdChange = (event) =>{
+        setPwd(event.target.value);
+    }
+
+    const handleSubmit = () => {
+        axios({ 
+            method: 'post',
+            url: 'http://127.0.0.1:8000/post',
+            data: {
+                'name' : name,
+                'email' : email,
+                'pwd' : pwd
+            }
+        })
+        .then(res => console.log(res))
+        .catch(error => console.log(error));
+        
+        console.log(name, email, pwd)
+    };
+
+    const isDisabled = !name || !email || !pwd;
+return (
+<> 
         < div className = "navi" > <div className="loginjoin-btn-box">
             <div
                 className="loginjoin-btn"
@@ -24,35 +58,34 @@ function Join() {
         <div className='joinform-box'>
             <div className='joinform-box01'>
                 <div className='form-text'>Name*</div>
-                <input type='text' className='form-field' placeholder='ex) 홍길동' id='name'/>
+                <input 
+                    type='text'
+                    className='form-field'
+                    placeholder='ex) 홍길동'
+                    value={name}
+                    onChange={handleNameChange}
+                />
                 <div className='form-text'>E-mail*</div>
-                <input type='email' className='form-field' placeholder='ex) abc123@example.com' id='email'/>
+                <input
+                    type='email'
+                    className='form-field'
+                    placeholder='ex) abc123@example.com'
+                    value={email}
+                    onChange={handleEmailChange}
+                />
                 <div className='form-text'>Password*</div>
-                <input type='password' className='form-field' placeholder='********' id='pw'/>
+                <input
+                    type='password'
+                    className='form-field'
+                    placeholder='********'
+                    value={pwd}
+                    onChange={handlePwdChange}
+                />
             </div>
             <div className='joinform-box02'>
-                <button onClick={()=>{
-                    console.log(document.querySelectorAll('.joinform-box01 input')[0].value,
-                                document.querySelectorAll('.joinform-box01 input')[1].value,
-                                document.querySelectorAll('.joinform-box01 input')[2].value);
-                    // axios.post('http://127.0.0.1:8000/test',
-                    //     {
-                    //         id : document.querySelectorAll('.form-box01 input')[0].value,
-                    //         pwd : document.querySelectorAll('.form-box01 input')[1].value
-                    //     }
-                    // )
-                    // .then(res => console.log(res))
-                    axios({
-                        method: 'post',
-                        url: 'http://127.0.0.1:8000/post',
-                        data: {
-                            'name' : document.querySelectorAll('.joinform-box01 input')[0].value,
-                            'email' : document.querySelectorAll('.joinform-box01 input')[1].value,
-                            'pwd' : document.querySelectorAll('.joinform-box01 input')[2].value
-                        }
-
-                    }).then(res => console.log(res))
-                }}>Create account</button>
+                <button onClick={handleSubmit} disabled={isDisabled}
+                >Create account
+                </button>
             </div>
         </div>
     </div>

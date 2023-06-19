@@ -489,3 +489,8 @@
 .joinform-box02 button:hover{
   cursor: pointer;
 }
+
+.joinform-box02 button:disabled{
+  opacity: 0.5;
+  cursor: not-allowed;
+}
