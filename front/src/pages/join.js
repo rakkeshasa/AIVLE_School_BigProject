@@ -27,7 +27,7 @@ function Join() {
             url: 'http://127.0.0.1:8000/post',
             data: {
                 'name' : name,
-                'email' : email,
+                'id' : email,
                 'pwd' : pwd
             }
         })
