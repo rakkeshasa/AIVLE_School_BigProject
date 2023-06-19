@@ -77,9 +77,13 @@ WSGI_APPLICATION = "chatmp4.wsgi.application"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chatmp4',
+        'USER': 'root',
+        'PASSWORD': 'aivle',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -129,4 +133,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = 'home.User'
+# AUTH_USER_MODEL = 'home.User'
