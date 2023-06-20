@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from home.models import User, Post
 import json
 import os
