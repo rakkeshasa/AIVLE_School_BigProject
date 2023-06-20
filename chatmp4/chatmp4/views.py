@@ -24,12 +24,11 @@ def login(request) :
         try:
             user = User.objects.get(email=id)
             if user.password == pwd:
-                return HttpResponse("Login successful!")
+                return HttpResponse("Login sucess")
             else:
-                return HttpResponse("Invalid credentials!")
+                return HttpResponse("Invalid credentials")
         except User.DoesNotExist:
-            return HttpResponse("User does not exist!")
-
+            return HttpResponse("User does not exist")
 
 # 파일 업로드
 @csrf_exempt
@@ -45,41 +44,16 @@ def videoUpload(request):
             for chunk in uploadFile.chunks():
                 destination.write(chunk)
 
-
         print(uploadFile)
         id = request.POST['userId']
-        
+
         video_title = request.POST['videoTitle']
         video_address = request.POST['videoAddress']
         upload_date = request.POST['uploadDate']
-        return HttpResponse('hello world')
-
-    #     try: # db저장
-    #         user = User.objects.get(id=user_id)
-    #         video = Video(
-    #             id=user,
-    #             video_title=video_title,
-    #             video_addr=video_address,
-    #             upload_date=upload_date
-    #         )
-    #         video.save()
-    #         return JsonResponse({'message': 'File uploaded successfully.'})
-    #     except User.DoesNotExist:
-    #         return JsonResponse({'message': 'User does not exist.'})
-    #     except Exception as e:
-    #         return JsonResponse({'message': 'Error occurred while uploading file.'})
-
-
-    # else:
-    #     return JsonResponse({'message': 'File upload failed.'})
-
-
-
-
+        return HttpResponse('file upload ok')
 
 # 회원가입
-
-@csrf_exempt       
+@csrf_exempt
 def signup(request):
     data = json.loads(request.body)
     if User.objects.filter(email=data['id']).exists():
@@ -98,13 +72,3 @@ def signup(request):
             'result':'signup'
         }
         return HttpResponse('signup')
-    
-def post(request):
-    postlist = Post.objects.all()
-        
-    return render(request, 'blog.html', {'postlist': postlist})
-
-def posting(request, pk):
-    post = Post.objects.get(pk=pk)
-    return render(request, 'posting.html', {'post':post})
-
