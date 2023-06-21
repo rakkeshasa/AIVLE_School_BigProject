@@ -42,7 +42,7 @@ function Login() {
                             'pwd' : document.querySelectorAll('.form-box01 input')[1].value
                         }
 
-                    }).then(res => res === 'login' ? navi('/') : console.log('로그인 실패'))
+                    }).then(res => console.log(res))
                 }}>Login</button>
                 <button>Create account</button>
             </div>

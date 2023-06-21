@@ -6,8 +6,8 @@ from . import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name='index.html'),name='index'),
-    path("login", views.login),
-    path("post", views.signup),
+    # path("login", views.login),
+    path("post", views.login_view),
     path("video", views.videoUpload),
     # path("blog/", views.post),
     # path('blog/<int:pk>/', views.posting, name="posting"),

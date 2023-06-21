@@ -6,10 +6,14 @@
 </head>
 <body>
     <h1>글쓰기 페이지</h1>
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         제목<br>
         <input type="text" name="postname"><br>
+        첨부파일 
+        <div class="input-group">
+            <input type="file" name="file" class="form-control">
+        </div>
         내용<br>
         <textarea rows="10" cols="50" name="contents"></textarea><br>
         <input type="submit" value="글쓰기">

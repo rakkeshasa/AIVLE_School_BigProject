@@ -13,23 +13,33 @@ def test(request) :
 
 
 @csrf_exempt
-def login(request) :
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        print(data)
-        id = data.get('id')
-        name = data.get('name')
-        pwd = data.get('pwd')
-        print(id, pwd)
+def post(request) : 
+    data = json.loads(request.body)
+    print(data['pwd'])
+    return HttpResponse("login page")
 
-        try:
-            user = User.objects.get(email=id)
-            if user.password == pwd:
-                return HttpResponse("Login sucess")
-            else:
-                return HttpResponse("Invalid credentials")
-        except User.DoesNotExist:
-            return HttpResponse("User does not exist")
+def login_view(request):
+    data = json.loads(request.body)
+    if User.objects.filter(email = data['id']).exists():
+        getUser = User.objects.get(email = data['id'])
+        if getUser.password == data['pwd']:
+            request.session['loginOk'] = True
+            context = {
+            "result": "로그인 성공"
+            }
+            return JsonResponse({'message': '로그인 성공'})
+        else:
+            request.session['loginOk'] = False
+            context = {
+                "result": "아이디 또는 비밀번호가 올바르지 않습니다."
+            }
+            return JsonResponse({'error': 'wrong'}, status=400)
+    else:
+        request.session['loginOk'] = False
+        context = {
+            "result": "존재하지 않는 id입니다."
+        }
+    return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
 
 # 파일 업로드
 @csrf_exempt
