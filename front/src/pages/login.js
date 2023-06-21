@@ -9,23 +9,24 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 function Login() {
     let navi = useNavigate()
     const [error, setError] = useState(null);
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleLogin = () => {
-        const id = document.querySelectorAll('.form-box01 input')[0].value;
-        const pwd = document.querySelectorAll('.form-box01 input')[1].value;
-
-        axios({
-            method: 'post',
-            url: 'http://127.0.0.1:8000/login',
-            data: {
-                'id': document.querySelectorAll('.form-box01 input')[0].value,
-                'pwd': document.querySelectorAll('.form-box01 input')[1].value
-            }
-        }).then(res => {
+        axios
+        .post('http://127.0.0.1:8000/login', {
+            id: id,
+            pwd: password
+        })
+        .then(res => {
+            const data = res.data;
+            const userName = data.name;
             console.log(res);
-            // 로그인이 성공한 경우, main 페이지로 이동
+            // 로그인이 성공한 경우, id와 환영 메시지 출력
+            alert(`로그인 성공! 환영합니다, ${userName}님`);
             navi("/");
-        }).catch(error => {
+        })
+        .catch(error => {
             if (error.response.status === 400) {
                 if (error.response.data.error === 'wrong_idpw') {
                   setError("아이디 혹은 비밀번호가 맞지 않습니다.");
@@ -64,14 +65,16 @@ function Login() {
                             type='email'
                             className='form-field'
                             placeholder='이메일'
-                            id='id'
+                            value={id}
+                            onChange={(e) => setId(e.target.value)}
                         />
                         <div className='form-text'>Password</div>
                         <input 
                             type='password'
                             className='form-field'
                             placeholder='비밀번호'
-                            id='pw'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
                     <div className='form-box02'>

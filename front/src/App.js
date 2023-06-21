@@ -4,6 +4,7 @@ import Main from './pages/main';
 import Login from './pages/login';
 import Join from './pages/join';
 import Chat from './pages/chat';
+import Blog from './pages/blog';
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/join' element={<Join/>}/>
                     <Route path='/chat' element={<Chat/>}/>
-                    <Route path='/join' element={<Join/>}/>
+                    <Route path='/blog' element={<Blog/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
