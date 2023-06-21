@@ -494,3 +494,9 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}

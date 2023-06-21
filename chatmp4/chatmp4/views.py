@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
@@ -14,7 +15,6 @@ def post(request) :
     print(data['pwd'])
     return HttpResponse("login page")
 
-
 def login_view(request):
     data = json.loads(request.body)
     if User.objects.filter(email = data['id']).exists():
@@ -24,20 +24,19 @@ def login_view(request):
             context = {
             "result": "로그인 성공"
             }
-            return HttpResponse('login')
+            return JsonResponse({'message': '로그인 성공'})
         else:
             request.session['loginOk'] = False
             context = {
-                "result": "비밀번호가 맞지 않습니다."
+                "result": "아이디 또는 비밀번호가 올바르지 않습니다."
             }
-            return HttpResponse('wrong pwd')
+            return JsonResponse({'error': 'wrong_idpw'}, status=400)
     else:
         request.session['loginOk'] = False
         context = {
             "result": "존재하지 않는 id입니다."
         }
-    return HttpResponse('failed')
-  
+    return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
          
 def signup(request):
     data = json.loads(request.body)
