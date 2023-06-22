@@ -115,6 +115,7 @@ def stt(request):
 def chat(request):
     current_directory = os.path.dirname(os.path.abspath(__file__))
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("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", isfirst=False, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='관우는 뭐했어?')
+    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='관우는 뭐했어?')
     print('chat success')
     return HttpResponse(res)
+

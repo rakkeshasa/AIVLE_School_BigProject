@@ -24,11 +24,11 @@ def split_video(input_file, output_file, total_time, duration):
     idx = 1
     for i in range(0,int(total_time)+1,duration):
         split_num = str(idx)
-        intervals.append((i, i+duration, output_file+f'/split_{split_num}.mp4'))
+        intervals.append((i, output_file+f'/split_{split_num}.mp4'))
         idx += 1
     
-    for i, interval in enumerate(intervals):
-        start_time, duration, output_file = interval
+    for interval in intervals:
+        start_time, output_file = interval
         command = f'ffmpeg -i {input_file} -ss {start_time} -t {duration} -c copy {output_file}'
         subprocess.call(command, shell=True)
         print(f'영상 {i+1} 분할 완료: {output_file}')

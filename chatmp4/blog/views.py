@@ -39,12 +39,14 @@ def new_post(request):
                 if file_name.startswith(f"{post.post_id}_"):
                     post_files.append(file_name)
 
+        print(post,post_files)
+
         context = {
             'post': post,
             'post_files': post_files,
         }
 
-        return render(request, 'new_post.html', context)
+        return render(request, 'posting.html', context)
 
     return render(request, 'new_post.html')
 
