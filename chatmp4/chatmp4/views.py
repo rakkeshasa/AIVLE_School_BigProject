@@ -1,6 +1,6 @@
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from home.models import User, Post
@@ -15,7 +15,6 @@ def test(request) :
     return HttpResponse("hello world")
 
 
-@csrf_exempt
 def post(request) : 
     data = json.loads(request.body)
     print(data['pwd'])
@@ -27,16 +26,13 @@ def login_view(request):
         getUser = User.objects.get(email = data['id'])
         if getUser.password == data['pwd']:
             request.session['loginOk'] = True
-            context = {
-            "result": "로그인 성공"
-            }
-            return JsonResponse({'message': '로그인 성공'})
+            return JsonResponse({'name': getUser.name, 'message': '로그인 성공'})
         else:
             request.session['loginOk'] = False
             context = {
                 "result": "아이디 또는 비밀번호가 올바르지 않습니다."
             }
-            return JsonResponse({'error': 'wrong'}, status=400)
+            return JsonResponse({'error': 'wrong_idpw'}, status=400)
     else:
         request.session['loginOk'] = False
         context = {
@@ -87,8 +83,6 @@ def signup(request):
         }
         return HttpResponse('signup')
 
-def test(request) : 
-    return HttpResponse("Hello world")
 
 def video_split(request):
     current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -119,3 +113,32 @@ def chat(request):
     print('chat success')
     return HttpResponse(res)
 
+
+# def post(request):
+#     postlist = Post.objects.all()
+#     return render(request, 'blog.html', {'postlist': postlist})
+
+# def posting(request, pk):
+#     post = Post.objects.get(pk=pk)
+#     return render(request, 'posting.html', {'post':post})
+
+# @csrf_exempt  
+# def new_post(request):
+#     if(request.method == 'POST'):
+#         post = Post()
+#         if request.user.is_authenticated:
+#             post.id2 = request.user
+
+#         post.post_title = request.POST['postname']
+#         post.post_text = request.POST['contents']
+#         post.post_date = timezone.now()
+#         post.save()
+
+#     return render(request, 'new_post.html')
+
+# def remove_post(request, pk):
+#     post = Post.objects.get(pk=pk)
+#     if request.method == 'POST':
+#         post.delete()
+#         return redirect('/blog/')
+#     return render(request, 'remove_post.html', {'Post': post})

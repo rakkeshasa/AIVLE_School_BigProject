@@ -2,8 +2,10 @@ import './App.css';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Main from './pages/main';
 import Login from './pages/login';
+import Join from './pages/join';
 import Chat from './pages/chat';
-import { useState } from 'react';
+import Blog from './pages/blog';
+
 
 function App() {
     const [filename, setFilename] = useState()
@@ -14,7 +16,10 @@ function App() {
                 <Routes>
                     <Route path='/' element={<Main setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
                     <Route path='/login' element={<Login/>}/>
-                    <Route path='/chat' element={<Chat filename={filename} upload={upload}/>}/>
+                    {/* <Route path='/chat' element={<Chat filename={filename} upload={upload}/>}/> */}
+                    <Route path='/join' element={<Join/>}/>
+                    <Route path='/chat' element={<Chat/>}/>
+                    <Route path='/blog' element={<Blog/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
