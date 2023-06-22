@@ -9,6 +9,7 @@ import os
 from . import video_split_model
 from . import stt_model
 from . import chat_model
+from django.contrib.auth import authenticate, login as auth_login
 
 
 def test(request) :
@@ -25,7 +26,7 @@ def login_view(request):
     if User.objects.filter(email = data['id']).exists():
         getUser = User.objects.get(email = data['id'])
         if getUser.password == data['pwd']:
-            request.session['loginOk'] = True
+            request.session['login_user'] = data['id']
             return JsonResponse({'name': getUser.name, 'message': '로그인 성공'})
         else:
             request.session['loginOk'] = False
@@ -39,6 +40,40 @@ def login_view(request):
             "result": "존재하지 않는 id입니다."
         }
     return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
+
+# @csrf_exempt
+# def login_view(request):
+#     data = json.loads(request.body)
+#     if User.objects.filter(email = data['id']).exists():
+#         username = User.objects.get(email=data['id'])
+#         password = data['pwd']
+#         user = authenticate(username=username, password=password)
+#         if user:
+#             if user.is_active:
+#                 auth_login(request, user)
+#                 return HttpResponseRedirect(request.GET.get('next',
+#                                             settings.LOGIN_REDIRECT_URL))
+#         else:
+#             error = 'Invalid username or password.'
+
+    # if User.objects.filter(email = data['id']).exists():
+    #     getUser = User.objects.get(email = data['id'])
+    #     if getUser.password == data['pwd']:
+    #         request.session['login_user'] = data['id']
+    #         return JsonResponse({'name': getUser.name, 'message': '로그인 성공'})
+    #     else:
+    #         request.session['loginOk'] = False
+    #         context = {
+    #             "result": "아이디 또는 비밀번호가 올바르지 않습니다."
+    #         }
+    #         return JsonResponse({'error': 'wrong_idpw'}, status=400)
+    # else:
+    #     request.session['loginOk'] = False
+    #     context = {
+    #         "result": "존재하지 않는 id입니다."
+    #     }
+    # return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
+
 
 # 파일 업로드
 @csrf_exempt

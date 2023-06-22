@@ -1,6 +1,8 @@
 import '../App.css'
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
+import Chat from './chat';
+import { useEffect, useState } from 'react';
 
 function Main() {
     let navi = useNavigate();
