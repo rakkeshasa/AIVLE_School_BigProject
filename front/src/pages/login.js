@@ -62,7 +62,7 @@ function Login() {
                     <div className='form-box01'>
                         <div className='form-text'>ID</div>
                         <input 
-                            type='email'
+                            type='text'
                             className='form-field'
                             placeholder='이메일'
                             value={id}

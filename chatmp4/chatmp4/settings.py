@@ -138,7 +138,8 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# AUTH_USER_MODEL = 'home.User'
+# AUTH_USER_MODEL = 'blog.User'
+SESSION_COOKIE_SECURE = True
 
 # 로그인 성공후 이동하는 URL
 LOGIN_REDIRECT_URL = '/'

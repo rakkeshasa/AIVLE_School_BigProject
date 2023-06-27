@@ -36,17 +36,4 @@ class Migration(migrations.Migration):
                 "managed": False,
             },
         ),
-        migrations.CreateModel(
-            name="Video",
-            fields=[
-                ("video_id", models.AutoField(primary_key=True, serialize=False)),
-                ("video_title", models.CharField(max_length=30)),
-                ("video_addr", models.CharField(max_length=50)),
-                ("upload_date", models.DateTimeField()),
-            ],
-            options={
-                "db_table": "video",
-                "managed": False,
-            },
-        ),
     ]

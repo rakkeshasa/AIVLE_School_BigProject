@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Post
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -25,8 +26,8 @@ def posting(request, pk):
 def new_post(request):
     if(request.method == 'POST'):
         post = Post()
-        # if request.user.is_authenticated:
-        #     post.id2 = request.user
+        if request.user.is_authenticated:
+            post.id2 = request.user
         post.post_title = request.POST['postname']
         post.post_text = request.POST['contents']
         post.post_date = timezone.now()
