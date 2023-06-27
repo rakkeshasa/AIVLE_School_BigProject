@@ -5,7 +5,8 @@ import backgroundImg03 from '../image/keyword.png';
 import logoImg from '../image/logo.png';
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import '../App.css';
 
 const show = keyframes`
     0% {
@@ -119,10 +120,10 @@ const LoginBox = styled.div`
         background-color: #D94925;
     }
 `
-const Home = () => {
+const Home = (props) => {
     const navi = useNavigate();
     const textContainersRef = useRef([]); // TextContainer 요소들을 참조할 배열
-    const [first, setFirst] = useState(false);
+    const [first, setFirst] = useState(true);
     const [seccond, setSeccond] = useState(false);
     const [third, setThird] = useState(false);
 
@@ -134,11 +135,11 @@ const Home = () => {
         setFirst(true);
         setSeccond(false);
         setThird(false);
-      }else if (scrollTop > 300 && scrollTop < 700){
+      }else if (scrollTop > 300 && scrollTop < 900){
         setFirst(false);
         setSeccond(true);
         setThird(false);
-      }else if (scrollTop > 700){
+      }else if (scrollTop > 900){
         setFirst(false);
         setSeccond(false);
         setThird(true);
@@ -158,7 +159,9 @@ const Home = () => {
     return(
         <>
         <Wrapper>
-            <UploadBox>비디오 업로드 하기</UploadBox>
+            <UploadBox onClick={()=>{
+                    document.getElementById('upload').click()
+                }}>비디오 업로드 하기</UploadBox>
             <NaviBar><Logo imageUrl={logoImg}/><LoginBox onClick={()=>{
                 navi('/login')
             }}>로그인</LoginBox></NaviBar>
@@ -183,6 +186,24 @@ const Home = () => {
                 <TextBox02>대화의 키워드를 요약하여<br/>개인이 소장 할 수 있어요</TextBox02>
                 </TextContainer>
             </Box>
+            <input type='file' id='upload' 
+                onChange={(e)=>{
+                    const formData = new FormData()
+                    formData.append('video', e.currentTarget.files[0])
+                    formData.append('title', 'title')
+                    axios({
+                        headers: {
+                            "Content-Type": "multipart/form-data" // enctype 설정
+                        },
+                        method: 'post',
+                        url: 'http://127.0.0.1:8000/video',
+                        data: formData,
+                    }).then(res => res ? props.setUpload(1) : props.setUpload(0))
+                    props.setFilename(e.currentTarget.files[0].name);
+                    navi('/chat')
+                }}
+            >  
+            </input>
         </Wrapper>
         </>
     )

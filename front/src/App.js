@@ -17,7 +17,7 @@ function App() {
                     <Route path='/main' element={<Main setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
                     <Route path='/login' element={<Login/>}/>
                     <Route path='/chat' element={<Chat filename={filename} upload={upload}/>}/>
-                    <Route path='/' element={<Home/>}/>
+                    <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
                     <Route path='/join' element={<Join/>}/>
                 </Routes>
             </div>

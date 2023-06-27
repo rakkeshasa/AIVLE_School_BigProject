@@ -19,7 +19,7 @@ const Join = () => {
                     <LoginForm type="text" placeholder="e-mail을 입력하세요."/>
                     <LoginText>NAME</LoginText>
                     <LoginForm type="text" placeholder="이름을 입력하세요."/>
-                    <LoginBtn>회원가입</LoginBtn>
+                    <LoginBtn height={'10%'}>회원가입</LoginBtn>
                 </LoginContainer>
             </LoginWrapper>
         </>

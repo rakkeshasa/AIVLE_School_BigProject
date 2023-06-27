@@ -121,7 +121,7 @@ export const LoginForm = styled.input`
 `
 export const LoginBtn = styled.div`
     width: 50%;
-    height: 8%;
+    height: ${(props)=>props.height};
     background-color: #FD6F22;
     color: white;
     margin: 2vh;
@@ -180,8 +180,8 @@ const Login = () =>{
                 <LoginForm type='text' placeholder='아이디를 입력하세요.'/>
                 <LoginText>PASSWORD</LoginText>
                 <LoginForm type='password' placeholder='비밀번호를 입력하세요.'/>
-                <LoginBtn>로그인</LoginBtn>
-                <LoginBtn onClick={()=>{navi('/join')}}>회원가입</LoginBtn>
+                <LoginBtn height={'8%'}>로그인</LoginBtn>
+                <LoginBtn height={'8%'} onClick={()=>{navi('/join')}}>회원가입</LoginBtn>
             </LoginContainer>
             </LoginWrapper>
         </>

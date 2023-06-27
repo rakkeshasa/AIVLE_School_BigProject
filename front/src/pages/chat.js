@@ -1,8 +1,16 @@
+import { useEffect, useState } from 'react';
 import '../App.css'
 import {useNavigate} from 'react-router-dom';
+import Chatting from '../components/chatting';
+import axios from 'axios';
 
 function Chat(props) {
     let navi = useNavigate();
+    const init = props.filename+" 에 대한 질문을 해주세요"
+    const [filenames, setFilenames] = useState([props.filename]);
+    const [filenum, setFilenum] = useState(0);
+    const [answer, setAnswer] = useState([init]);
+    const [chat, setChat] = useState([]);
     return (
         <div className='wrapper'>
             < div >
@@ -13,30 +21,43 @@ function Chat(props) {
                             onClick={() => {
                                 navi("/");
                             }}>Home</div>
-                        <div className="loginjoin-btn">Join</div>
+                        <div className="loginjoin-btn" onClick={()=>{
+                            navi("/join");
+                        }}>Join</div>
                     </div>
                 </div>
             </div>
             <div className='chat-left-bar'>
-                <input type='file' id='new-chat'></input>
+                <input type='file' id='new-chat'
+                   onChange={(e) => {
+                    setFilenames([...filenames, e.currentTarget.files[0].name])
+                    setFilenum(filenum+1);
+                }}></input>
                 <div
                     className='chat-plus'
                     onClick={() => {
-                        document
-                            .getElementById('new-chat')
-                            .click();
+                        document.getElementById('new-chat').click();
                     }}>
                     <div className='chat-plus-text01'>+ New Chat</div>
                     <div className='chat-plus-text02'>Drop MP4 here</div>
                 </div>
-                <div className='file-title'>{props.filename}</div>
+                {filenames.map((filename)=><div className='file-title' onClick={()=>{
+
+                }}>{filename}</div>)}
             </div>
             <div className='chat-wrapper'>
-                <div className='chat-box'></div>
-                <div className='question-wrapper'><div className='question-box'><input type='textarea' onKeyUp={(e)=>{
+                <Chatting answer={answer} chat={chat}/>
+                <div className='question-wrapper'><div className='question-box'><input type='textarea' id='chat-question' 
+                onKeyUp={(e)=>{
                     e.target.value === ''? document.querySelector('.submit-button').classList.remove('active') : document.querySelector('.submit-button').classList.add('active');
                     e.target.value === ''? document.querySelector('.material-symbols-outlined').classList.remove('active') : document.querySelector('.material-symbols-outlined').classList.add('active')
-                }}></input><div className='submit-button'><span class="material-symbols-outlined">
+                }} onKeyDown={(e)=>{e.keyCode===13 && document.querySelector('.submit-button').click()}}>
+                    </input><div className='submit-button' onClick={()=>{
+                    document.querySelector('#chat-question').value === '' ? document.querySelector('.material-symbols-outlined').classList.remove('active') :setChat([...chat, document.querySelector('#chat-question').value]);
+                    setAnswer([...answer]);
+                    document.querySelector('#chat-question').value = '';
+                    axios.post('http://127.0.0.1:8000/video2chat',document.querySelector('#chat-question').value).then(res=>{setAnswer([...answer, res])})
+                }}><span class="material-symbols-outlined">
                 send
                 </span></div></div></div>
             </div>

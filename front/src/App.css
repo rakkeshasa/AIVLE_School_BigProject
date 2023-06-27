@@ -112,8 +112,7 @@
   position: fixed;
   width: 100%;
   height: 60px;
-  background-color: #001529;
-  background: #001529;
+  background: black;
   border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -132,7 +131,7 @@
   width: 120px;
   height: 30px;
   margin-top: 13px;
-  background-color: #1677FF;
+  background-color: #FD6F22;
   color: white;
   border-radius: 10px;
   display: flex;
@@ -203,6 +202,10 @@
   align-items: center;
 }
 
+#upload {
+  display: none;
+}
+
 .upload-innner-box input{
   display: none;
 }
@@ -218,7 +221,7 @@
 .upload-center-box:hover{
   cursor: pointer;
 }
-#D94925
+
 .upload-img{
   background-image: url('../public/images/upload.png');
   width: 400px;
@@ -355,7 +358,7 @@
   margin: 0;
   padding: 0;
   border: solid;
-  background-color: #001529;
+  background-color:black;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -411,7 +414,7 @@
   width: 85%;
   height: 5%;
   color: white;
-  background-color: #1677FF;
+  background-color: #FD6F22;
   border-radius: 10px;
   overflow: hidden;
   font-size: small;
@@ -432,10 +435,16 @@
   height: calc(100vh - 60px);
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 .chat-box{
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  overflow-x: hidden;
   width: 100%;
   height: 90%;
+  margin-left: 50px;
 }
 
 .question-wrapper {
@@ -455,6 +464,7 @@
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
   border-radius: 10px;
   align-items: center;
+  background-color: white;
 }
 .question-box input {
   width: 90%;
@@ -484,7 +494,7 @@
   cursor: pointer;
 }
 .submit-button.active {
-  background-color: #1677FF;
+  background-color: #FD6F22;
 }
 
 .material-symbols-outlined {
@@ -502,3 +512,40 @@
   'FILL' 1
 
 }
+
+.answer {
+  z-index: -1;
+  text-align: left;
+  width: 25vw;
+  height: auto;
+  margin: 20px;
+  padding: 15px;
+  background-color: lightblue;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.to-bottom-btn{
+  width: 35px;
+  height: 35px;
+  border-radius: 35px;
+  border: 0;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
+  background-color: white;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background-position: center;
+  background-image: url('image/tobot.png');
+  background-size: 80%;
+  background-repeat: no-repeat;
+}
+
+.to-bottom-btn.active{
+  display: none;
+}
+
+.to-bottom-btn:hover{
+  cursor: pointer;
+}
+
