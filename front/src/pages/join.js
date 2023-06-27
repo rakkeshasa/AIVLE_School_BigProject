@@ -1,102 +1,45 @@
-import '../App.css'
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import axios from 'axios';
+import styled from "styled-components";
+import Login, { Background, Circle, LoginBtn, LoginContainer, LoginForm, LoginImgWrapper, LoginText, LoginTop } from "./login";
+import { LoginWrapper} from "./login";
+import vita from '../image/vita.png'
+import { useRef } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
-
-function Join() {
-    let navi = useNavigate()
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [pwd, setPwd] = useState('');
-
-    const handleNameChange = (event) =>{
-        setName(event.target.value);
-    }
-
-    const handleEmailChange = (event) =>{
-        setEmail(event.target.value);
-    }
-
-    const handlePwdChange = (event) =>{
-        setPwd(event.target.value);
-    }
-
-    const handleSubmit = () => {
-        axios({ 
-            method: 'post',
-            url: 'http://127.0.0.1:8000/join',
-            data: {
-                'name' : name,
-                'id' : email,
-                'pwd' : pwd
-            }
-        })
-        .then(res => console.log(res))
-        .catch(error => console.log(error));
-        
-        console.log(name, email, pwd)
-    };
-
-    const isDisabled = !name || !email || !pwd;
-    return (
-        <div className = "navi">
-            <div className="loginjoin-btn-box">
-                <div
-                    className="loginjoin-btn"
-                    onClick={() => {
-                        navi("/");
-                    }}>Home
-                </div>
-                <div 
-                    className="loginjoin-btn"
-                    onClick={() => {
-                        navi("/login")
-                    }}>Login
-                </div>
-            </div>
-            <div className='join-box'>
-                <div className='join-text'>Sign Up</div>
-                <div className='joinform-box'>
-                    <div className='joinform-box01'>
-                        <div className='form-text'>Name*</div>
-                        <input 
-                            type='text'
-                            className='form-field'
-                            placeholder='ex) 홍길동'
-                            value={name}
-                            onChange={handleNameChange}
-                        />
-                        <div className='form-text'>E-mail*</div>
-                        <input
-                            type='email'
-                            className='form-field'
-                            placeholder='ex) abc123@example.com'
-                            value={email}
-                            onChange={handleEmailChange}
-                        />
-                        <div className='form-text'>Password*</div>
-                        <input
-                            type='password'
-                            className='form-field'
-                            placeholder='영문과 숫자 조합 8자리 이상 입력해주세요.'
-                            value={pwd}
-                            onChange={handlePwdChange}
-                        />
-                    </div>
-                    <div className='joinform-box02'>
-                        <button 
-                            onClick={handleSubmit}
-                            disabled={isDisabled}
-                            >Create account
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+const Join = () => {
+    const navi = useNavigate();
+    const email = useRef();
+    const password = useRef();
+    const username = useRef();
+    return(
+        <>
+            <LoginWrapper>
+                <LoginImgWrapper imageUrl={vita}/>
+                <Background><Circle/><Circle/></Background>
+                <LoginContainer>
+                    <LoginTop>Sign Up</LoginTop>
+                    <LoginText>EMAIL</LoginText>
+                    <LoginForm type="text" placeholder="e-mail을 입력하세요." ref={email}/>
+                    <LoginText>PASSWORD</LoginText>
+                    <LoginForm type="password" placeholder="비밀번호를 입력하세요." ref={password}/>
+                    <LoginText>NAME</LoginText>
+                    <LoginForm type="text" placeholder="이름을 입력하세요." ref={username}/>
+                    <LoginBtn height={'9%'} onClick={() => {
+                        console.log(email.current.value, password.current.value, username.current.value);
+                        axios({
+                            method: 'post',
+                            url: 'http://127.0.0.1:8000/join',
+                            data: {
+                                'id' : email.current.value,
+                                'pwd' : password.current.value,
+                                'name': username.current.value
+                            }
+                        }).then(res => res ? navi('/') : console.log('회원가입 실패'))
+                    }}>회원가입</LoginBtn>
+                </LoginContainer>
+            </LoginWrapper>
+        </>
+    )
 }
 
 export default Join;

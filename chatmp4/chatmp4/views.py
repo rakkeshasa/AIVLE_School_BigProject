@@ -22,54 +22,56 @@ def post(request) :
     print(data['pwd'])
     return HttpResponse("login page")
 
-@csrf_exempt
-def login_view(request):
-    data = json.loads(request.body)
-    if User.objects.filter(username = data['id']).exists():
-        print(User.objects.get(username = data['id']),data['id'])
-        print(User.objects.get(password = data['pwd']),data['pwd'])
-        user = authenticate(request, username=data['id'], password=data['pwd'])
-        # user = data['id']
-        print(user)
-        getUser = User.objects.get(username = data['id'])
-        if user is not None:
-            login(request, user)
-            request.session['login_user'] = data['id']
-            return JsonResponse({'name': user.username, 'message': '로그인 성공'})
-        else:
-            context = {
-                "result": "아이디 또는 비밀번호가 올바르지 않습니다."
-            }
-            return JsonResponse({'error': 'wrong_idpw'}, status=400)
-    else:
-        context = {
-            "result": "존재하지 않는 이메일입니다."
-        }
-        return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)
-
+# @csrf_exempt
 # def login_view(request):
 #     data = json.loads(request.body)
 #     if User.objects.filter(username = data['id']).exists():
 #         print(User.objects.get(username = data['id']),data['id'])
 #         print(User.objects.get(password = data['pwd']),data['pwd'])
 #         user = authenticate(request, username=data['id'], password=data['pwd'])
+#         # user = data['id']
 #         print(user)
 #         getUser = User.objects.get(username = data['id'])
-#         if getUser.password == data['pwd']:
-#             request.session['user'] = data['id']
-#             return JsonResponse({'name': getUser.username, 'message': '로그인 성공'})
+#         if user is not None:
+#             login(request, username=data['id'], password=data['pwd'])
+#             request.session['login_user'] = data['id']
+#             return JsonResponse({'name': user.username, 'message': '로그인 성공'})
 #         else:
-#             request.session['loginOk'] = False
 #             context = {
 #                 "result": "아이디 또는 비밀번호가 올바르지 않습니다."
 #             }
 #             return JsonResponse({'error': 'wrong_idpw'}, status=400)
 #     else:
-#         request.session['loginOk'] = False
 #         context = {
-#             "result": "존재하지 않는 id입니다."
+#             "result": "존재하지 않는 이메일입니다."
 #         }
-#     return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
+#         return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)
+
+@csrf_exempt
+def login_view(request):
+    data = json.loads(request.body)
+    if User.objects.filter(username = data['id']).exists():
+        print(User.objects.get(username = data['id']),data['id'])
+        print(User.objects.get(password = data['pwd']),data['pwd'])
+        # login(request, username=data['id'], password=data['pwd'])
+        user = authenticate(request, username=data['id'], password=data['pwd'])
+        print(user)
+        getUser = User.objects.get(username = data['id'])
+        if getUser.password == data['pwd']:
+            request.session['user'] = data['id']
+            return JsonResponse({'name': getUser.username, 'message': '로그인 성공'})
+        else:
+            request.session['loginOk'] = False
+            context = {
+                "result": "아이디 또는 비밀번호가 올바르지 않습니다."
+            }
+            return JsonResponse({'error': 'wrong_idpw'}, status=400)
+    else:
+        request.session['loginOk'] = False
+        context = {
+            "result": "존재하지 않는 id입니다."
+        }
+    return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
 
 # @csrf_exempt
 # def login_view(request):
@@ -131,11 +133,12 @@ def videoUpload(request):
 @csrf_exempt
 def signup(request):
     data = json.loads(request.body)
+    print(data)
     if User.objects.filter(email=data['id']).exists():
         context={
             'result': '이미 존재하는 아이디입니다.'
         }
-        return HttpResponse('already exists')
+        return HttpResponse(False)
 
     else:
         User.objects.create(
@@ -146,7 +149,7 @@ def signup(request):
         context={
             'result':'signup'
         }
-        return HttpResponse('signup')
+        return HttpResponse(True)
 
 
 def video_split(request):
@@ -171,13 +174,17 @@ def stt(request):
     print('stt success')
     return HttpResponse("STT Success")
 
-def chat(request):
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='발화자는 무슨 이야기 중이야?')
-    print('chat success')
-    return HttpResponse(res)
+# def chat(request):
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+#     res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='발화자는 무슨 이야기 중이야?')
+#     print('chat success')
+#     return HttpResponse(res)
 
+# @csrf_exempt
+# def 
+
+@csrf_exempt
 def video2chat(request):
     #응답 받기
     data = json.loads(request.body)
@@ -185,7 +192,7 @@ def video2chat(request):
 
     # video split
     current_directory = os.path.dirname(os.path.abspath(__file__))
-    input_fath = os.path.join(current_directory,'test_file','video_file','input','test_input.mp4')
+    input_fath = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
     output_fath = os.path.join(current_directory,'test_file','video_file','output')
     tt = video_split_model.get_video_duration(input_fath)
     video_split_model.split_video(input_fath, output_fath, tt, 30)
@@ -201,9 +208,9 @@ def video2chat(request):
         stt_model.STT(input_path,output_path)
     print('stt success')  
 
-
+    q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message=data)
+    res = chat_model.chat("", isfirst=False, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     return HttpResponse(res)

@@ -14,7 +14,7 @@ urlpatterns = [
     path('blog/',include('blog.urls')),
     path("video_split", views.video_split, name='video_split'),
     path("stt", views.stt, name='stt'),
-    path("chat", views.chat, name='chat'),
+    # path("chat", views.chat, name='chat'),
     path("video2chat", views.video2chat, name='v2c'),
     path("login", views.login_view),
     path("join", views.signup),
