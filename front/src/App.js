@@ -10,14 +10,15 @@ import Join from './pages/join';
 function App() {
     const [filename, setFilename] = useState()
     const [upload, setUpload] = useState()
+    const [userlogin, setUserlogin] = useState()
     return (
         <BrowserRouter>
             <div className="App">
                 <Routes>
                     <Route path='/main' element={<Main setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
-                    <Route path='/login' element={<Login/>}/>
-                    <Route path='/chat' element={<Chat filename={filename} upload={upload}/>}/>
-                    <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
+                    <Route path='/login' element={<Login userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
+                    <Route path='/chat' element={<Chat filename={filename} upload={upload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
+                    <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
                     <Route path='/join' element={<Join/>}/>
                 </Routes>
             </div>

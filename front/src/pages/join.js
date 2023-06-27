@@ -10,7 +10,7 @@ const Join = () => {
     const navi = useNavigate();
     const email = useRef();
     const password = useRef();
-    const name = useRef();
+    const username = useRef();
     return(
         <>
             <LoginWrapper>
@@ -23,18 +23,18 @@ const Join = () => {
                     <LoginText>PASSWORD</LoginText>
                     <LoginForm type="password" placeholder="비밀번호를 입력하세요." ref={password}/>
                     <LoginText>NAME</LoginText>
-                    <LoginForm type="text" placeholder="이름을 입력하세요." ref={name}/>
+                    <LoginForm type="text" placeholder="이름을 입력하세요." ref={username}/>
                     <LoginBtn height={'9%'} onClick={() => {
-                        console.log(email.current.value, password.current.value, name.current.value);
+                        console.log(email.current.value, password.current.value, username.current.value);
                         axios({
                             method: 'post',
                             url: 'http://127.0.0.1:8000/join',
                             data: {
                                 'id' : email.current.value,
                                 'pwd' : password.current.value,
-                                'name': name.current.vlaue
+                                'name': username.current.value
                             }
-                        }).then(res => res === 'join' ? navi('/') : console.log('회원가입 실패'))
+                        }).then(res => res ? navi('/') : console.log('회원가입 실패'))
                     }}>회원가입</LoginBtn>
                 </LoginContainer>
             </LoginWrapper>

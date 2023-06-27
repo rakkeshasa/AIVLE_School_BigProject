@@ -21,7 +21,7 @@ const Question = ({text}) => {
     return(
         <>  
             <QuestionWrapper>
-            <QuestionBox>{text}</QuestionBox>
+                <QuestionBox>{text}</QuestionBox>
             </QuestionWrapper>
         </>
     )

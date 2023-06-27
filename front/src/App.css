@@ -549,3 +549,9 @@
   cursor: pointer;
 }
 
+.login-alert{
+  color: white;
+  width: 300px;
+  height: 40px;
+}
+

@@ -4,6 +4,7 @@ import vita from '../image/vita.png';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import axios from 'axios';
+import { useState } from 'react';
 // import {useNavigate} from 'react-router-dom';
 // import axios from 'axios';
 
@@ -169,10 +170,12 @@ export const Circle = styled.div`
         bottom: -80px;
     }
 `
-const Login = () =>{
+const Login = (props) =>{
     const navi = useNavigate();
     const email = useRef();
     const password = useRef();
+    const button = useRef();
+    const [status, setStatus] = useState(true);
     return(
         <>
             <LoginWrapper>
@@ -181,11 +184,22 @@ const Login = () =>{
             <LoginContainer>
                 <LoginTop>Login</LoginTop>
                 <LoginText>ID</LoginText>
-                <LoginForm type='text' placeholder='이메일을 입력하세요.' ref={email}/>
+                <LoginForm type='text' placeholder='이메일을 입력하세요.' ref={email} onKeyDown={(e)=>{
+                    e.keyCode===13 && password.current.focus();
+                }}/>
                 <LoginText>PASSWORD</LoginText>
-                <LoginForm type='password' placeholder='비밀번호를 입력하세요.' ref={password}/>
-                <LoginBtn height={'8%'} onClick={()=>{
+                <LoginForm type='password' placeholder='비밀번호를 입력하세요.' ref={password} onKeyDown={(e)=>{
+                    e.keyCode===13 && button.current.click();
+                }}/>
+                <LoginBtn height={'8%'} ref={button} onClick={()=>{
                     console.log(email.current.value, password.current.value);
+                    if(email.current.value===''){
+                        setStatus('아이디를 입력하세요');
+                        email.current.focus();
+                    }else if(password.current.value===''){
+                        setStatus('비밀번호를 입력하세요')
+                        password.current.focus();
+                    }else {
                      axios({
                          method: 'post',
                          url: 'http://127.0.0.1:8000/login',
@@ -193,9 +207,19 @@ const Login = () =>{
                              'id' : email.current.value,
                              'pwd' : password.current.value
                          }
-                     }).then(res => res === 'login' ? navi('/') : console.log('로그인 실패'))      
-                }}>로그인</LoginBtn>
+                     }).then((res)=>{
+                        if(res.data['status'] == true){
+                            props.setUserlogin(true)
+                            sessionStorage.setItem('isLoggedIn', 'true')
+                            sessionStorage.setItem('userId', res.data['session_id'])
+                            navi('/');
+                        }else{
+                            setStatus(res.data['status'])
+                        }
+                     })      
+                }}}>로그인</LoginBtn>
                 <LoginBtn height={'8%'} onClick={()=>{navi('/join')}}>회원가입</LoginBtn>
+                <div className='login-alert'>{status}</div>
             </LoginContainer>
             </LoginWrapper>
         </>

@@ -11,6 +11,7 @@ function Chat(props) {
     const [filenum, setFilenum] = useState(0);
     const [answer, setAnswer] = useState([init]);
     const [chat, setChat] = useState([]);
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     return (
         <div className='wrapper'>
             < div >
@@ -22,8 +23,10 @@ function Chat(props) {
                                 navi("/");
                             }}>Home</div>
                         <div className="loginjoin-btn" onClick={()=>{
-                            navi("/join");
-                        }}>Join</div>
+                            axios.get('http://127.0.0.1:8000/logout');
+                            sessionStorage.setItem('isLoggedIn', 'false');
+                            isLoggedIn ? navi('/') : navi('/join');
+                        }}>{isLoggedIn ? 'Logout' : 'Join'}</div>
                     </div>
                 </div>
             </div>
@@ -55,8 +58,16 @@ function Chat(props) {
                     </input><div className='submit-button' onClick={()=>{
                     document.querySelector('#chat-question').value === '' ? document.querySelector('.material-symbols-outlined').classList.remove('active') :setChat([...chat, document.querySelector('#chat-question').value]);
                     setAnswer([...answer]);
+                    axios({
+                        method: 'post',
+                        url: 'http://127.0.0.1:8000/video2chat',
+                        data: {
+                            'question': document.querySelector('#chat-question').value,
+                        }
+                    }).then(res=>{console.log(res);
+                    setAnswer([...answer, res.data])})
+                    console.log(answer);
                     document.querySelector('#chat-question').value = '';
-                    axios.post('http://127.0.0.1:8000/video2chat',document.querySelector('#chat-question').value).then(res=>{setAnswer([...answer, res])})
                 }}><span class="material-symbols-outlined">
                 send
                 </span></div></div></div>

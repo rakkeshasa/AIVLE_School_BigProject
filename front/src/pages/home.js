@@ -129,6 +129,7 @@ const Home = (props) => {
     const [first, setFirst] = useState(true);
     const [seccond, setSeccond] = useState(false);
     const [third, setThird] = useState(false);
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
 
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
@@ -157,17 +158,24 @@ const Home = (props) => {
         };
       }, []);
     
-
-
     return(
         <>
         <Wrapper>
             <UploadBox onClick={()=>{
-                    document.getElementById('upload').click()
+                    isLoggedIn ? document.getElementById('upload').click() : alert('로그인 하세요')
                 }}>비디오 업로드 하기</UploadBox>
             <NaviBar><Logo imageUrl={logoImg}/><LoginBox onClick={()=>{
-                navi('/login')
-            }}>로그인</LoginBox></NaviBar>
+                if(isLoggedIn){
+                    axios.get('http://127.0.0.1:8000/logout');
+                    sessionStorage.setItem('isLoggedIn', 'false');
+                    /* eslint-disable no-restricted-globals */
+                    setTimeout(function() {
+                        location.reload();
+                      }, 1000);
+                }else {
+                    navi('/login');
+                }
+            }}>{isLoggedIn ? '로그아웃' : '로그인'}</LoginBox></NaviBar>
             <Box height='93vh' className="box">
                 <ImgWrapper imageUrl={backgroundImg}/>
                 <TextContainer className="text" ref={textContainersRef.current[0]} animate={first}>
