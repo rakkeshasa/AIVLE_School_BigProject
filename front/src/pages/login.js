@@ -2,6 +2,8 @@ import '../App.css';
 import styled from "styled-components";
 import vita from '../image/vita.png';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import axios from 'axios';
 // import {useNavigate} from 'react-router-dom';
 // import axios from 'axios';
 
@@ -169,6 +171,8 @@ export const Circle = styled.div`
 `
 const Login = () =>{
     const navi = useNavigate();
+    const email = useRef();
+    const password = useRef();
     return(
         <>
             <LoginWrapper>
@@ -177,10 +181,20 @@ const Login = () =>{
             <LoginContainer>
                 <LoginTop>Login</LoginTop>
                 <LoginText>ID</LoginText>
-                <LoginForm type='text' placeholder='아이디를 입력하세요.'/>
+                <LoginForm type='text' placeholder='이메일을 입력하세요.' ref={email}/>
                 <LoginText>PASSWORD</LoginText>
-                <LoginForm type='password' placeholder='비밀번호를 입력하세요.'/>
-                <LoginBtn height={'8%'}>로그인</LoginBtn>
+                <LoginForm type='password' placeholder='비밀번호를 입력하세요.' ref={password}/>
+                <LoginBtn height={'8%'} onClick={()=>{
+                    console.log(email.current.value, password.current.value);
+                     axios({
+                         method: 'post',
+                         url: 'http://127.0.0.1:8000/login',
+                         data: {
+                             'id' : email.current.value,
+                             'pwd' : password.current.value
+                         }
+                     }).then(res => res === 'login' ? navi('/') : console.log('로그인 실패'))      
+                }}>로그인</LoginBtn>
                 <LoginBtn height={'8%'} onClick={()=>{navi('/join')}}>회원가입</LoginBtn>
             </LoginContainer>
             </LoginWrapper>

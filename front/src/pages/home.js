@@ -14,6 +14,9 @@ const show = keyframes`
         transform: translate3d(0,50%,0);
         opacity: 0;
     }
+    50% {
+        opacity: 0.5;
+    }
     100% {
         top: 0%;
         transform: translateZ(0);
@@ -71,7 +74,7 @@ const TextContainer = styled.div`
     ${({ animate }) =>
     animate &&
     css`
-      animation: ${show} 2s;
+      animation: ${show} 1.5s ease-in-out;
     `}
 `
 
