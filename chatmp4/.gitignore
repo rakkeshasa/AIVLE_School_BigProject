@@ -10,6 +10,7 @@ media
 db
 chatmp4/test_file
 test_file
+client
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/
 # in your Git repository. Update and uncomment the following line accordingly.
