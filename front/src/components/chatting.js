@@ -2,6 +2,7 @@ import Question from "./question";
 import '../App.css'
 import Answer from "./answer";
 import { useEffect } from "react";
+import { useRef } from "react";
 
 
 const Chatting = (props) => {
@@ -20,9 +21,12 @@ const Chatting = (props) => {
         <div className='chat-box'>
             <button className="to-bottom-btn" onClick={()=>{autoScroll()}}>
             </button>
-            <div className='answer-container'>
-                {props.answer.map(answer=><Answer text={answer}/>)}</div>
-                {props.chat.map(question=><Question text={question}/>)}
+            {props.chat.map((question, index) => (
+          <>
+            <Question text={question}/>
+            <Answer text={props.answer[index+1]} />
+          </>
+        ))}
         </div>
     );
 };

@@ -11,6 +11,7 @@ function Chat(props) {
     const [filenum, setFilenum] = useState(0);
     const [answer, setAnswer] = useState([init]);
     const [chat, setChat] = useState([]);
+    const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     return (
         <div className='wrapper'>
             < div >
@@ -22,8 +23,10 @@ function Chat(props) {
                                 navi("/");
                             }}>Home</div>
                         <div className="loginjoin-btn" onClick={()=>{
-                            navi("/join");
-                        }}>Join</div>
+                            axios.get('http://127.0.0.1:8000/logout');
+                            sessionStorage.setItem('isLoggedIn', 'false');
+                            isLoggedIn ? navi('/') : navi('/join');
+                        }}>{isLoggedIn ? 'Logout' : 'Join'}</div>
                     </div>
                 </div>
             </div>

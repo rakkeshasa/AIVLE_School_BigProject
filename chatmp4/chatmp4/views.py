@@ -17,7 +17,7 @@ def test(request) :
     return HttpResponse("hello world")
 
 
-def post(request) : 
+def post(request) :
     data = json.loads(request.body)
     print(data['pwd'])
     return HttpResponse("login page")
@@ -50,28 +50,52 @@ def post(request) :
 @csrf_exempt
 def login_view(request):
     data = json.loads(request.body)
-    if User.objects.filter(username = data['id']).exists():
-        print(User.objects.get(username = data['id']),data['id'])
-        print(User.objects.get(password = data['pwd']),data['pwd'])
+    if User.objects.filter(email = data['id']).exists():
         # login(request, username=data['id'], password=data['pwd'])
-        user = authenticate(request, username=data['id'], password=data['pwd'])
-        print(user)
-        getUser = User.objects.get(username = data['id'])
+        # user = authenticate(request, username=data['id'], password=data['pwd'])
+        getUser = User.objects.get(email = data['id'])
+ 
         if getUser.password == data['pwd']:
             request.session['user'] = data['id']
-            return JsonResponse({'name': getUser.username, 'message': '로그인 성공'})
+            return JsonResponse({'status': True,
+                                 'session_id': request.session.get('user')})
         else:
-            request.session['loginOk'] = False
-            context = {
-                "result": "아이디 또는 비밀번호가 올바르지 않습니다."
-            }
-            return JsonResponse({'error': 'wrong_idpw'}, status=400)
+            # request.session['loginOk'] = False
+            # context = {
+            #     "result": "아이디 또는 비밀번호가 올바르지 않습니다."
+            # }
+            # return JsonResponse({'error': 'wrong_idpw'}, status=400)
+            return JsonResponse({'status': '아이디 또는 비밀번호가 올바르지 않습니다.'})
     else:
-        request.session['loginOk'] = False
-        context = {
-            "result": "존재하지 않는 id입니다."
-        }
-    return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
+    #     request.session['loginOk'] = False
+    #     context = {
+    #         "result": "존재하지 않는 id입니다."
+    #     }
+    # return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
+        return JsonResponse({'status': '존재하지 않는 id입니다.'})
+    
+def logout(request):
+    request.session.clear()
+
+    return HttpResponse('logout')
+
+def test(request): 
+    user_id = request.session.get('user')
+    print(user_id)
+    if user_id : 
+        return HttpResponse('hello')
+    else :
+        return HttpResponse('ㅠㅠ')
+    
+
+def mypage(request): 
+    user_id = request.session.get('user')
+    getUser = User.objects.filter(email = user_id)
+    res = {'id': getUser.email,
+           'password': getUser.password,
+           'name' : getUser.name}
+    print(res)
+    return JsonResponse(res)
 
 # @csrf_exempt
 # def login_view(request):
@@ -188,7 +212,7 @@ def stt(request):
         input_path = os.path.join(current_directory,'test_file','video_file','output',chatmp4_file)
         output_name = os.path.splitext(chatmp4_file)[0]
         output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
-    
+   
         stt_model.STT(input_path,output_path)
     print('stt success')
     return HttpResponse("STT Success")
@@ -201,7 +225,7 @@ def chat(request):
     return HttpResponse(res)
 
 # @csrf_exempt
-# def 
+# def
 
 @csrf_exempt
 def video2chat(request):
@@ -223,7 +247,7 @@ def video2chat(request):
     #     input_path = os.path.join(current_directory,'test_file','video_file','output',chatmp4_file)
     #     output_name = os.path.splitext(chatmp4_file)[0]
     #     output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
-    
+   
     #     stt_model.STT(input_path,output_path)
     # print('stt success')  
 

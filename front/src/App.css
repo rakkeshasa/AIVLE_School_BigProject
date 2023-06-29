@@ -549,3 +549,19 @@
   cursor: pointer;
 }
 
+.login-alert{
+  color: white;
+  width: 300px;
+  height: 40px;
+}
+
+.naviIcon{
+  color: white;
+}
+
+.home-top-btn-container{
+  width: 246px;
+  display: flex;
+  justify-content: space-between;
+
+}
