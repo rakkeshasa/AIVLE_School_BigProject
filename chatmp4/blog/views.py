@@ -9,10 +9,6 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 import os
 
-def chk(request):
-    print(request.user)
-    return render(request, 'loginchk.html')
-
 def post(request):
     postlist = Post.objects.all()
     return render(request, 'blog.html', {'postlist': postlist})

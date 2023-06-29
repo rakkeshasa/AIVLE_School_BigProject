@@ -73,24 +73,23 @@ def videoUpload(request):
             for chunk in uploadFile.chunks():
                 destination.write(chunk)
 
-        print(uploadFile)
+        # 비디오 모델 생성
         user_id = request.session.get('user_id')
         video_title = request.POST['title']
         user_email = request.session.get('user')
-
         user = User.objects.get(email=user_email)
-        print(user_email)
-        print(user.id)
-
         video = Video(id = user, video_title=video_title, video_addr=file_path, upload_date=datetime.now())
         video.save()
 
+        request.session.pop('uploaded_video_id')
+        request.session['uploaded_video_id'] = video.video_id
+
         # 동영상 학습
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        input_path = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
+        input_path = os.path.join(file_path) # 비디오 경로 수정
         output_path = os.path.join(current_directory,'test_file','video_file','output')
         tt = video_split_model.get_video_duration(input_path)
-        video_split_model.split_video(input_fath, output_path, tt, 30)
+        video_split_model.split_video(input_path, output_path, tt, 30)
         print('split success')
 
         # stt
@@ -128,20 +127,12 @@ def signup(request):
         return HttpResponse(True)
 
 
-def video_split(request):
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    input_fath = os.path.join(current_directory,'test_file','video_file','input','test_input.mp4')
-    output_fath = os.path.join(current_directory,'test_file','video_file','output')
-    tt = video_split_model.get_video_duration(input_fath)
-    video_split_model.split_video(input_fath, output_fath, tt, 30)
-    print('split success')
-    return HttpResponse("Split Success")
-
 @csrf_exempt
 def video2chat(request):
     #응답 받기
     data = json.loads(request.body)
-    print(data)
+    video_id = request.session.get('uploaded_video_id')
+    print(video_id)
 
     # video split
     current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -149,7 +140,7 @@ def video2chat(request):
 
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     return HttpResponse(res)
