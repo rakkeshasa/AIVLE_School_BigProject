@@ -1,20 +1,9 @@
 import '../App.css'
 import {useNavigate} from 'react-router-dom';
-import Chat from './chat';
-import { useEffect, useState } from 'react';
 import axios from "axios";
 
-// function reducer(currentState, action){
-//     const newState = {...currentState}
-//     return newState;
-// }
-// const store = createStore();
-function Main() {
+function Main(props) {
     let navi = useNavigate();
-    const [filename, setFilename] = useState()
-    useEffect(()=>{
-        console.log(filename);
-    }, [filename])
     return (
         <> < div className = "navi" > <div className="loginjoin-btn-box">
             <div
@@ -22,13 +11,7 @@ function Main() {
                 onClick={() => {
                     navi("/login");
                 }}>Login</div>
-            <div className="loginjoin-btn" onClick={()=>{
-                axios({
-                    method: 'post',
-                    url: 'http://127.0.0.1:8000/test',
-                    params: 'hello'
-                }).then(result=>console.log(result))
-            }}>Join</div>
+            <div className="loginjoin-btn">Join</div>
         </div>
     </div>
     <div className="title-box">
@@ -39,7 +22,19 @@ function Main() {
         <div className="upload-innner-box">
             <input type='file' id='upload' 
             onChange={(e)=>{
-                setFilename(e.currentTarget.files[0].name);
+                const formData = new FormData()
+                formData.append('video', e.currentTarget.files[0])
+                formData.append('title', 'title')
+                axios({
+                    headers: {
+                        "Content-Type": "multipart/form-data" // enctype 설정
+                      },
+                    method: 'post',
+                    url: 'http://127.0.0.1:8000/video',
+                    data: formData,
+                }).then(res => res ? props.setUpload(1) : props.setUpload(0))
+                props.setFilename(e.currentTarget.files[0].name);
+                navi('/chat')
             }}
             >
                 
