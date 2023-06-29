@@ -107,7 +107,7 @@ def login_view(request):
     # return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
 
 
-# 파일 업로드
+# 파일 업로드 및 학습
 @csrf_exempt
 def videoUpload(request):
     if request.method == 'POST' and request.FILES['video']:
@@ -122,11 +122,30 @@ def videoUpload(request):
                 destination.write(chunk)
 
         print(uploadFile)
-        id = request.POST['userId']
+        # id = request.POST['userId']
 
-        video_title = request.POST['videoTitle']
-        video_address = request.POST['videoAddress']
-        upload_date = request.POST['uploadDate']
+        # video_title = request.POST['videoTitle']
+        # video_address = request.POST['videoAddress']
+        # upload_date = request.POST['uploadDate']
+
+        # 동영상 학습
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        input_fath = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
+        output_fath = os.path.join(current_directory,'test_file','video_file','output')
+        tt = video_split_model.get_video_duration(input_fath)
+        video_split_model.split_video(input_fath, output_fath, tt, 30)
+        print('split success')
+
+        # stt
+        chatmp4_files = os.listdir(os.path.join(current_directory, 'test_file','video_file','output'))
+        for chatmp4_file in chatmp4_files:
+            input_path = os.path.join(current_directory,'test_file','video_file','output', chatmp4_file)
+            output_name = os.path.splitext(chatmp4_file)[0]
+            output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
+    
+            stt_model.STT(input_path,output_path)
+        print('stt success')  
+        
         return HttpResponse('file upload ok')
 
 # 회원가입
@@ -174,12 +193,12 @@ def stt(request):
     print('stt success')
     return HttpResponse("STT Success")
 
-# def chat(request):
-#     current_directory = os.path.dirname(os.path.abspath(__file__))
-#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-#     res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='발화자는 무슨 이야기 중이야?')
-#     print('chat success')
-#     return HttpResponse(res)
+def chat(request):
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='발화자는 무슨 이야기 중이야?')
+    print('chat success')
+    return HttpResponse(res)
 
 # @csrf_exempt
 # def 
@@ -192,25 +211,25 @@ def video2chat(request):
 
     # video split
     current_directory = os.path.dirname(os.path.abspath(__file__))
-    input_fath = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
-    output_fath = os.path.join(current_directory,'test_file','video_file','output')
-    tt = video_split_model.get_video_duration(input_fath)
-    video_split_model.split_video(input_fath, output_fath, tt, 30)
-    print('split success')
+    # input_fath = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
+    # output_fath = os.path.join(current_directory,'test_file','video_file','output')
+    # tt = video_split_model.get_video_duration(input_fath)
+    # video_split_model.split_video(input_fath, output_fath, tt, 30)
+    # print('split success')
 
-    # stt
-    chatmp4_files = os.listdir(os.path.join(current_directory, 'test_file','video_file','output'))
-    for chatmp4_file in chatmp4_files:
-        input_path = os.path.join(current_directory,'test_file','video_file','output',chatmp4_file)
-        output_name = os.path.splitext(chatmp4_file)[0]
-        output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
+    # # stt
+    # chatmp4_files = os.listdir(os.path.join(current_directory, 'test_file','video_file','output'))
+    # for chatmp4_file in chatmp4_files:
+    #     input_path = os.path.join(current_directory,'test_file','video_file','output',chatmp4_file)
+    #     output_name = os.path.splitext(chatmp4_file)[0]
+    #     output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
     
-        stt_model.STT(input_path,output_path)
-    print('stt success')  
+    #     stt_model.STT(input_path,output_path)
+    # print('stt success')  
 
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("", isfirst=False, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     return HttpResponse(res)
