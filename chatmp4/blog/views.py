@@ -21,14 +21,13 @@ def posting(request, pk):
     post = Post.objects.get(pk=pk)
     return render(request, 'posting.html', {'post':post})
 
+@login_required
 @csrf_exempt  
 def new_post(request):
     if(request.method == 'POST'):
         post = Post()
-
-        user = User.objects.get(email=request.session.get('user'))
-        post.id2 = user # 아이디
-        post.post_writer = request.session.get('username')
+        if request.user.is_authenticated:
+            post.id2 = request.user
         post.post_title = request.POST['postname']
         post.post_text = request.POST['contents']
         post.post_date = timezone.now()
