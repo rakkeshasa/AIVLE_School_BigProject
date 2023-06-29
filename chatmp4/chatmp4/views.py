@@ -50,10 +50,10 @@ def post(request) :
 @csrf_exempt
 def login_view(request):
     data = json.loads(request.body)
-    if User.objects.filter(username = data['id']).exists():
+    if User.objects.filter(email = data['id']).exists():
         # login(request, username=data['id'], password=data['pwd'])
         # user = authenticate(request, username=data['id'], password=data['pwd'])
-        getUser = User.objects.get(username = data['id'])
+        getUser = User.objects.get(email = data['id'])
  
         if getUser.password == data['pwd']:
             request.session['user'] = data['id']
@@ -86,6 +86,17 @@ def test(request):
         return HttpResponse('hello')
     else :
         return HttpResponse('ㅠㅠ')
+    
+
+def mypage(request): 
+    user_id = request.session.get('user')
+    getUser = User.objects.filter(email = user_id)
+    res = {'id': getUser.email,
+           'password': getUser.password,
+           'name' : getUser.name}
+    print(res)
+    return JsonResponse(res)
+
 # @csrf_exempt
 # def login_view(request):
 #     data = json.loads(request.body)

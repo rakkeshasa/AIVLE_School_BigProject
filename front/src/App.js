@@ -6,6 +6,7 @@ import Chat from './pages/chat';
 import { useState } from 'react';
 import Home from './pages/home';
 import Join from './pages/join';
+import Mypage from './pages/mypage';
 
 function App() {
     const [filename, setFilename] = useState()
@@ -20,6 +21,7 @@ function App() {
                     <Route path='/chat' element={<Chat filename={filename} upload={upload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
                     <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
                     <Route path='/join' element={<Join/>}/>
+                    <Route path='/mypage' element={<Mypage/>}/>
                 </Routes>
             </div>
         </BrowserRouter>
