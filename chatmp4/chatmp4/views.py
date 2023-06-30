@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from blog.models import Post, User
+from blog.models import Post, User, Video
 # from django.contrib.auth.models import User
 import json
 import os
@@ -57,6 +57,8 @@ def login_view(request):
  
         if getUser.password == data['pwd']:
             request.session['user'] = data['id']
+            request.session['user_id'] = getUser.id
+            
             return JsonResponse({'status': True,
                                  'session_id': request.session.get('user')})
         else:
@@ -90,10 +92,10 @@ def test(request):
 
 def mypage(request): 
     user_id = request.session.get('user')
-    getUser = User.objects.filter(email = user_id)
-    res = {'id': getUser.email,
+    getUser = User.objects.get(email = user_id)
+    res = {'id' : getUser.email,
            'password': getUser.password,
-           'name' : getUser.name}
+           'name': getUser.username}
     print(res)
     return JsonResponse(res)
 
@@ -220,7 +222,7 @@ def stt(request):
 def chat(request):
     current_directory = os.path.dirname(os.path.abspath(__file__))
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message='발화자는 무슨 이야기 중이야?')
+    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message='발화자는 무슨 이야기 중이야?')
     print('chat success')
     return HttpResponse(res)
 
@@ -286,3 +288,13 @@ def video2chat(request):
 #         post.delete()
 #         return redirect('/blog/')
 #     return render(request, 'remove_post.html', {'Post': post})
+
+def getLog(request):
+    user_id = request.session.get('user_id')
+    print(user_id)
+    videoList = Video.objects.filter(id = user_id)
+    title = [video.video_title for video in videoList]
+    category = [video.category for video in videoList]
+    data = {'title': title,
+            'category': category}
+    return JsonResponse(data)

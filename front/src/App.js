@@ -12,16 +12,17 @@ function App() {
     const [filename, setFilename] = useState()
     const [upload, setUpload] = useState()
     const [userlogin, setUserlogin] = useState()
+    const [page, setPage] = useState(0);
     return (
         <BrowserRouter>
             <div className="App">
                 <Routes>
                     <Route path='/main' element={<Main setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
-                    <Route path='/login' element={<Login userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
+                    <Route path='/login' element={<Login userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
                     <Route path='/chat' element={<Chat filename={filename} upload={upload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
-                    <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
+                    <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
                     <Route path='/join' element={<Join/>}/>
-                    <Route path='/mypage' element={<Mypage/>}/>
+                    <Route path='/mypage' element={<Mypage page={page} setPage={setPage}/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

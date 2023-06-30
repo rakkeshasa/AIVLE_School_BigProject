@@ -428,7 +428,6 @@
 }
 
 .chat-wrapper{
-  position: absolute;
   top: 60px;
   left: 200px;
   width: calc(100vw - 200px);
@@ -510,7 +509,6 @@
   color: white;
   font-variation-settings:
   'FILL' 1
-
 }
 
 .answer {

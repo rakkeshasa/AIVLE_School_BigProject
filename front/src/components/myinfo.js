@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import ProfileImg from '../image/profile.jpg';
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
     width: 90vw;
     height: 100vh;
     display: flex;
@@ -32,18 +32,18 @@ const ProfileText = styled.div`
     height: 50px;
     text-align: left;
 `
-const Myinfo = () => {
+const Myinfo = (props) => {
     return(
         <>
             <Wrapper>
                 <Container>
                     <Profile imageUrl={ProfileImg}/>
                     <ProfileText>ID</ProfileText>
-                    <ProfileText></ProfileText>
+                    <ProfileText>{props.id}</ProfileText>
                     <ProfileText>PASSWORD</ProfileText>
-                    <ProfileText></ProfileText>
+                    <ProfileText>{props.pw}</ProfileText>
                     <ProfileText>NAME</ProfileText>
-                    <ProfileText></ProfileText>
+                    <ProfileText>{props.name}</ProfileText>
             </Container>
             </Wrapper>
         </>
