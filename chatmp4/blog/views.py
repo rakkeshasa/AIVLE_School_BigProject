@@ -17,7 +17,6 @@ def posting(request, pk):
     post = Post.objects.get(pk=pk)
     return render(request, 'posting.html', {'post':post})
 
-@login_required
 @csrf_exempt  
 def new_post(request):
     if(request.method == 'POST'):
@@ -48,7 +47,6 @@ def new_post(request):
             'post': post,
             'post_files': post_files,
         }
-
         return render(request, 'posting.html', context)
 
     return render(request, 'new_post.html')

@@ -7,10 +7,10 @@ from blog.models import Post, Video
 from django.contrib.auth.models import User
 import json
 import os
-from . import video_split_model
-from . import stt_model
-from . import chat_model
+from . import video_split_model, subject, stt_model, chat_model, summary
 from django.contrib.auth import authenticate, login
+from google.cloud import language_v1
+from google.cloud import translate_v2
 from datetime import datetime
 
 
@@ -78,11 +78,25 @@ def videoUpload(request):
         video_title = request.POST['title']
         user_email = request.session.get('user')
         user = User.objects.get(email=user_email)
-        video = Video(id = user, video_title=video_title, video_addr=file_path, upload_date=datetime.now())
-        video.save()
 
-        request.session.pop('uploaded_video_id')
-        request.session['uploaded_video_id'] = video.video_id
+        # video_file, result 폴더 내 파일 삭제
+        current_directory = os.path.dirname(os.path.abspath(__file__)) 
+        video_directory = os.path.join(current_directory, 'test_file', 'video_file', 'output')
+        text_directory = os.path.join(current_directory, 'test_file', 'text_file', 'result')
+        
+        # 디렉토리 내의 모든 파일 삭제
+        for filename in os.listdir(video_directory):
+            remove_path = os.path.join(video_directory, filename)
+            if os.path.isfile(remove_path):
+                print(remove_path)
+                os.remove(remove_path)
+                
+        # 디렉토리 내의 모든 파일 삭제
+        for filename in os.listdir(text_directory):
+            remove_path = os.path.join(text_directory, filename)
+            if os.path.isfile(remove_path):
+                os.remove(remove_path)
+
 
         # 동영상 학습
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -100,7 +114,61 @@ def videoUpload(request):
             output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
     
             stt_model.STT(input_path,output_path)
-        print('stt success')  
+        print('stt success')
+
+        # summary
+        list_dir = os.path.join(current_directory, 'test_file', 'text_file', 'result') # 텍스트들 받아옴
+        text_lst = os.listdir(os.path.join(current_directory, 'test_file', 'text_file', 'result')) # 텍스트 파일 제목
+        for text in text_lst:
+            sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(list_dir, text))
+            print(sm_txt)
+        # sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(current_directory, 'test_file', 'text_file', 'combine','temp.txt'))
+        # print(sm_txt)
+
+        # category
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        input = os.path.join(current_directory, 'test_file','text_file','result')
+        output = os.path.join(current_directory, 'test_file','text_file','combine','temp.txt')
+
+        subject.text_combine(input, output)
+
+        # 번역 클라이언트를 인스턴스화
+        translate_client = translate_v2.Client()
+        file_path = os.path.join(current_directory, 'test_file','text_file','combine','temp.txt') # txt 경로
+        with open(file_path, 'r', encoding='utf-8') as file:
+            text = file.read()
+
+        translation = translate_client.translate(text, target_language='en') #텍스트 영어로 번역
+        translated_text = translation['translatedText']
+
+        # 주제 분류
+        language_client = language_v1.LanguageServiceClient()
+        document = language_v1.Document(content=translated_text, type_=language_v1.Document.Type.PLAIN_TEXT)
+        response = language_client.classify_text(request={'document': document}) # 결과
+
+        if response.categories: 
+            first_category = response.categories[0] 
+            result = { 
+                    'name': first_category.name, 
+                    'confidence': first_category.confidence 
+                    } 
+        else: result = { 
+                        'name': 'No category found', 
+                        'confidence': 0.0 } 
+        
+        name = result['name']
+        last_name = name.split('/')[-1]
+        
+        video = Video(id = user, video_title=video_title, video_addr=file_path, upload_date=datetime.now(), category = last_name)
+        video.save()
+
+        request.session.pop('uploaded_video_id', None)
+        request.session['uploaded_video_id'] = video.video_id
+        
+        db_directory = os.path.join(current, 'db')
+
+        if os.path.exists(db_directory):
+            shutil.rmtree(db_directory)
         
         return HttpResponse('file upload ok')
 
@@ -134,10 +202,7 @@ def video2chat(request):
     video_id = request.session.get('uploaded_video_id')
     print(video_id)
 
-    # video split
     current_directory = os.path.dirname(os.path.abspath(__file__))
-
-
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
     res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
