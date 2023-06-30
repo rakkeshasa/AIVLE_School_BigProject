@@ -16,7 +16,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 `
 const Profile = styled.div`
     background-image: ${(props) => `url(${props.imageUrl})`};
@@ -28,9 +28,12 @@ const Profile = styled.div`
     background-position: center;
 `
 const ProfileText = styled.div`
+    font-family: 'Nanum Gothic', sans-serif;
     width: 250px;
-    height: 50px;
+    height: 30px;
     text-align: left;
+    color: #3E363F;
+    border-bottom: solid #E5E5E5;
 `
 const Myinfo = (props) => {
     return(

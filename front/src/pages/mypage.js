@@ -126,7 +126,7 @@ const Mypage = (props) => {
                 </MyPageLeftBar>
                 {props.page === 0 && <Chat answer={answer} setAnswer={setAnswer} chat={chat} setChat={setChat}/>}
                 {props.page === 1 && <Categroy/>}
-                {props.page === 2 && <Log title={title} category={category}/>}
+                {props.page === 2 && <Log title={title} category={category} name={name}/>}
                 {props.page === 3 && <Myinfo id={id} pw={pw} name={name}/>}
             </Wrapper>
         </>
