@@ -22,4 +22,5 @@ urlpatterns = [
     path('logout', views.logout),
     path('mypageinfo', views.mypage),
     path('getLog', views.getLog),
+    path('getChat/', views.getChat, name='getChat')
 ]

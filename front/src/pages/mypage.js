@@ -6,6 +6,7 @@ import axios from "axios"
 import Log from "../components/log"
 import Categroy from "../components/category"
 import Chat from "./chat"
+import Loading from "../components/loading"
 
 const Wrapper = styled.div`
     display: flex;
@@ -52,6 +53,7 @@ const Mypage = (props) => {
     const [name, setName] = useState();
     const [answer, setAnswer] = useState([]);
     const [chat, setChat] = useState([]);
+    const [loading, setLoading] = useState(true);
     
     useEffect(()=>{
         if(props.page === 0){
@@ -64,16 +66,19 @@ const Mypage = (props) => {
             categorypage.current.style.color = '#FD6F22';
             logpage.current.style.color = 'white';
             myinfopage.current.style.color = 'white';
+            setLoading(false)
         }else if(props.page === 2){
             chatpage.current.style.color = 'white';
             categorypage.current.style.color = 'white';
             logpage.current.style.color = '#FD6F22';
             myinfopage.current.style.color = 'white';
+            setLoading(false)
         }else {
             chatpage.current.style.color = 'white';
             categorypage.current.style.color = 'white';
             logpage.current.style.color = 'white';
             myinfopage.current.style.color = '#FD6F22';
+            setLoading(false)
         }
     })
     return(
@@ -84,7 +89,7 @@ const Mypage = (props) => {
                     <TextWrapper onClick={()=>{
                         navi('/')
                     }}>Home</TextWrapper>
-                    <span class="material-symbols-outlined">Home</span>
+                    <span class="material-symbols-outlined" onClick={()=>{setLoading(false)}}>Home</span>
                     </IconWrapper>
                     <IconWrapper>
                     <TextWrapper ref={chatpage} onClick={()=>{
@@ -101,13 +106,14 @@ const Mypage = (props) => {
                     <IconWrapper>
                     <TextWrapper ref={logpage} onClick={()=>{
                         props.setPage(2)
-                        axios({
-                            method: 'get',
-                            url: 'http://127.0.0.1:8000/getLog'
-                        }).then((res) => {
-                            setTitle(res.data['title'])
-                            setCategory(res.data['category'])
-                        })
+                        // axios({
+                        //     method: 'get',
+                        //     url: 'http://127.0.0.1:8000/getLog'
+                        // }).then((res) => {
+                        //     setName(res.data['id'])
+                        //     setTitle(res.data['title'])
+                        //     setCategory(res.data['category'])
+                        // })
                         }}>Log</TextWrapper>
                     <span class="material-symbols-outlined">contract_edit</span>
                     </IconWrapper>
@@ -126,8 +132,9 @@ const Mypage = (props) => {
                 </MyPageLeftBar>
                 {props.page === 0 && <Chat answer={answer} setAnswer={setAnswer} chat={chat} setChat={setChat}/>}
                 {props.page === 1 && <Categroy/>}
-                {props.page === 2 && <Log title={title} category={category} name={name}/>}
+                {props.page === 2 && <Log title={title} category={category} name={name} setAnswer={setAnswer} setChat={setChat} setPage={props.setPage} page={props.page}/>}
                 {props.page === 3 && <Myinfo id={id} pw={pw} name={name}/>}
+                {loading && <Loading/>}
             </Wrapper>
         </>
     )

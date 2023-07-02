@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import ProfileImg from '../image/profile.jpg';
+
 export const Wrapper = styled.div`
     width: 90vw;
     height: 100vh;
@@ -20,7 +21,7 @@ const Container = styled.div`
 `
 const Profile = styled.div`
     background-image: ${(props) => `url(${props.imageUrl})`};
-    background-size: cover;
+    background-size: 80%;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
     width: 250px;
     height: 250px;

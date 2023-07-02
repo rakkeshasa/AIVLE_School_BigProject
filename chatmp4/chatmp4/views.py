@@ -295,6 +295,56 @@ def getLog(request):
     videoList = Video.objects.filter(id = user_id)
     title = [video.video_title for video in videoList]
     category = [video.category for video in videoList]
-    data = {'title': title,
+    data = {'id' : user_id,
+            'title': title,
             'category': category}
     return JsonResponse(data)
+
+
+def getChat(request):
+    user_id = request.session.get('user_id')
+    idx = request.GET.get('idx', None)
+    idx = int(idx)
+    if user_id is not None and idx is not None:
+        videos = Video.objects.filter(id=user_id)
+        if videos.exists() and idx < len(videos):
+            video = videos[idx]
+            answer = video.answer.split('/')
+            question = video.question.split('/')
+            response = {
+                'answer': answer,
+                'question': question
+            }
+            return JsonResponse(response)
+    
+    return HttpResponse('데이터 없음')
+
+# @csrf_exempt
+# def video2chat(request):
+#     #응답 받기
+#     video_id = request.session.get('uploaded_video_id')
+#     print(video_id)
+#     data = json.loads(request.body)
+#     video_id = request.session.get('uploaded_video_id')
+#     print(video_id)
+#     # video split
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     print(current_directory)
+#     q = str(data['question'])
+#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+#     res = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+#     print('chat success')
+#     # return JsonResponse({'result': res, 'message': '답변 성공'})
+#     # db에 question , answer 에 / 붙여서 넣기
+#     q = q + "/"
+#     db_qa = Video.objects.get(video_id = video_id)
+#     load_q = db_qa.question
+#     q = load_q + q
+#     ans = str(res) + "/"
+#     load_a = db_qa.answer
+#     ans = load_a + ans
+#     video = get_object_or_404(Video, video_id=video_id)
+#     video.question = q
+#     video.answer = ans
+#     video.save()
+#     return HttpResponse(res)

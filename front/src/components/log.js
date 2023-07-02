@@ -57,14 +57,16 @@ const Log = (props) => {
         borderBottom: 'solid #E5E5E5',
         padding: '10px'
       };
+      const title = ['고전시가', '침착맨', '점프 투 파이썬', '점프 투 장고', '점프 투 자바']
+      const category = ['교육', '유튜브', 'IT', 'IT', 'IT']
     return(
         <>
             <Wrapper>
                 <Container>
                     <LogLeft><Profile imageUrl={profile}/><LogLeftTextBox><div style={divStyle}>{props.name}님의</div><br></br><div>로그를 확인하세요</div></LogLeftTextBox></LogLeft>
                     <LogContainer>
-                    {props.title.map((title, idx)=>
-                        <Row title={title} category={props.category[idx]}/>
+                    {title.map((title, idx)=>
+                        <Row title={title} category={category[idx]} idx={idx} setAnswer={props.setAnswer} setChat={props.setChat} setPage={props.setPage} page={props.page}/>
                     )}
                     </LogContainer>
                 </Container>

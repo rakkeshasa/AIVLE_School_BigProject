@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Home from './pages/home';
 import Join from './pages/join';
 import Mypage from './pages/mypage';
+import Loading from './components/loading';
 
 function App() {
     const [filename, setFilename] = useState()
@@ -23,6 +24,7 @@ function App() {
                     <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
                     <Route path='/join' element={<Join/>}/>
                     <Route path='/mypage' element={<Mypage page={page} setPage={setPage}/>}/>
+                    <Route path='/loading' element={<Loading/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

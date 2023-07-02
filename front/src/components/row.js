@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -6,6 +8,7 @@ const Container = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
+    border: solid;
 `
 const Title = styled.div`
     width: 400px;
@@ -28,11 +31,25 @@ const Category = styled.div`
     border-radius: 20px;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
 `
-const Row = ({title, category}) =>{
+
+const Row = (props) =>{
+    const navi = useNavigate();
     return(
         <>
             <Container>
-                <Title>{title}</Title><Category>{category}</Category>
+                <Title onClick={() => {
+                    props.setPage(0)
+                    navi('/mypage')
+                    console.log(props.page);
+                    console.log(props.idx);
+                    axios.get(`http://127.0.0.1:8000/getChat?idx=${props.idx}`)
+                    .then((res) => {
+                        props.setAnswer(res.data['answer'])
+                        props.setChat(res.data['question'])
+                        props.setPage(0)
+                        navi('/mypage')
+                    })
+                }}>{props.title}</Title><Category>{props.category}</Category>
             </Container>
         </>
     )
