@@ -151,3 +151,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CUSTOM_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(CUSTOM_DIR, 'chatmp4', 'test_file', 'logical-vim-391000-b24b3db4747b.json')

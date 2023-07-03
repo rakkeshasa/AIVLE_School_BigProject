@@ -1,9 +1,10 @@
 import '../App.css'
 import styled from "styled-components";
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
+import logoImg from '../image/logo.png';
 
 const NaviBar = styled.div`
   width: 100%;
@@ -13,7 +14,35 @@ const NaviBar = styled.div`
   align-items: center;
   background-color: black;
 `
+const Logo = styled.div`
+    width: 10%;
+    height: 100%;
+    background-image: ${(props) => `url(${props.imageUrl})`};
+    background-repeat: no-repeat;
+    background-size: 60%;
+    background-position: center;
+`
+const Wrapper = styled.div`
+  height: 300vh;
+  overflow-x: hidden;
+  font-family: 'Nanum Gothic', sans-serif;
+  user-select: none;
+`
+const LoginBox = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 114px;
+    height: 33px;
+    background-color: #FD6F22;
+    border-radius: 10px;
+    color: white;
 
+    &:hover {
+        cursor: pointer;
+        background-color: #D94925;
+    }
+`
 const BoardContainer = styled.div`
   height: calc(100vh - 7vh);
   overflow-x: hidden;
@@ -22,13 +51,11 @@ const BoardContainer = styled.div`
   background-color: #f8f8f8;
   padding: 20px;
 `
-
 const PostList = styled.ul`
   padding: 100;
   margin: 150;
   list-style: none;
 `
-
 const PostItem = styled.li`
   position: relative;
   display: flex;
@@ -41,20 +68,17 @@ const PostItem = styled.li`
   cursor: pointer;
   align-items: flex-start;
 `
-
 const PostTitle = styled.h3`
   font-size: 1.5rem;
   color: #333333;
 
 `
-
 const PostContent = styled.p`
   font-size: 1rem;
   color: #666666;
   display: ${({ isExpanded }) => (isExpanded ? 'block' : 'none')};
   margin-top: 10px;
 `
-
 const CustomModal = styled(Modal)`
   .modal {
     position: absolute;
@@ -84,7 +108,6 @@ const CustomModal = styled(Modal)`
     transform: translateX(-50%) translateY(-50%);
   }
 `
-
 const Input = styled.input`
   width: 100%;
   padding: 10px;
@@ -92,7 +115,6 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
 `
-
 const TextArea = styled.textarea`
   width: 100%;
   height: 300px;
@@ -102,7 +124,6 @@ const TextArea = styled.textarea`
   border-radius: 5px;
   resize: none;
 `
-
 const Button = styled.button`
   padding: 10px 20px;
   background-color: #FD6F22;
@@ -116,17 +137,18 @@ const Button = styled.button`
     background-color: #D94925;
   }
 `
-
 const Checkbox = styled.input`
   margin-right: 10px;
 `
 
 const Board = () => {
+  const navi = useNavigate();
   const [posts, setPosts] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', text: ''});
   const [expandedPostId, setExpandedPostId] = useState(null);
   const [selectedPosts, setSelectedPosts] = useState([]);
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   
   const openModal = () => {
     setModalOpen(true);
@@ -140,28 +162,35 @@ const Board = () => {
     setNewPost({ ...newPost, [e.target.name]: e.target.value });
   }
 
-  const createPost = () => {
-    const createdPost = {
-      id: posts.length + 1,
-      title: newPost.title,
-      text: newPost.text,
-      // createdAt: new Date().toLocaleString(),
-    };
-    setPosts([...posts, createdPost]);
-    closeModal();
-  }
+  const createPost = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/blog/create_post', {
+        id: posts.length+1,
+        title: newPost.title,
+        text: newPost.text
+      });
+      console.log(response.data); // 생성된 게시물 데이터 출력
+      // 모달 닫기 및 초기화
+      closeModal();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/get_post')
-      .then(response => {
-        setPosts(response.data.PostList);
-        console.log(posts);
-      })
-      .catch(error => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/blog/get_post');
+        setPosts(response.data);
+        console.log(response.data); // 가져온 데이터를 콘솔에 출력합니다.
+      } catch (error) {
         console.error(error);
-      })
-    })
-    // 임시로 데이터를 생성하여 설정
+      }
+    };
+  
+    fetchPosts();
+  }, []);
+
 
   const togglePostContent = (postId) => {
     if (postId === expandedPostId) {
@@ -169,7 +198,7 @@ const Board = () => {
       return;
     }
     setExpandedPostId(postId);
-  };
+  }
 
   const handlePostCheckboxChange = (postId) => {
     setSelectedPosts((prevSelectedPosts) => {
@@ -188,77 +217,91 @@ const Board = () => {
     setSelectedPosts([]);
   }
 
-  const DeleteCheckbox = ({ checked, onChange }) => {
-    return (
-      <input type="checkbox" checked={checked} onChange={onChange} />
-    );
-  }
-
   return (
     <>
-      <NaviBar>
-        
-      </NaviBar>
-      
-      <BoardContainer>
-        <PostList>
-          {posts && posts.map((post) => (
-            <PostItem key={post.id2} onClick={() => togglePostContent(post.id2)}>
-              {/* {selectedPosts.includes(post.id2) && (
-                <Checkbox
-                  type="checkbox"
-                  checked={true}
-                  onChange={() => handlePostCheckboxChange(post.id2)}
-                />
-              )}
-              {!selectedPosts.includes(post.id2) && (
-                <Checkbox
-                  type="checkbox"
-                  checked={false}
-                  onChange={() => handlePostCheckboxChange(post.id2)}
-                />
-              )} */}
-              <PostTitle>{post.post_title}</PostTitle>
-              <PostContent isExpanded={post.post_id === expandedPostId}>
-                {post.post_text}
-              </PostContent>
-            </PostItem>
-          ))}
-        </PostList>
-      
-        <Button onClick={openModal}>Create Post</Button>
-
-        <CustomModal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          className="custom-Modal"
-          overlayClassName="custom-ModalOverlay"
-        >
-          <div className="modal show">
-            <div className="modal_body">
-              <h2>새 글쓰기</h2>
-              <Input
-                type="text"
-                name="title"
-                value={newPost.post_title}
-                onChange={handleInputChange}
-                placeholder="Post Title"
-              />
-              <TextArea
-                name="text"
-                value={newPost.post_text}
-                onChange={handleInputChange}
-                placeholder="Post Content"
-              ></TextArea>
-              <Button onClick={createPost}>Create</Button>
-              <br/>
-              <Button onClick={closeModal}>Cancel</Button>
+      <Wrapper>
+        <NaviBar>
+          <Logo imageUrl={logoImg}/>
+            <div className="home-top-btn-container">
+              <LoginBox onClick={()=>{
+                if(isLoggedIn){
+                  axios.get('http://127.0.0.1:8000/logout');
+                  sessionStorage.setItem('isLoggedIn', 'false');
+                  /* eslint-disable no-restricted-globals */
+                  setTimeout(function() {
+                    location.reload();
+                  }, 1000);
+                }else {
+                  navi('/login');
+                }
+              }}>{isLoggedIn ? '로그아웃' : '로그인'}</LoginBox>
+              <LoginBox onClick={()=>{
+                  isLoggedIn ? navi('/mypage') : navi('/join')}}>{isLoggedIn ? '마이페이지' : '회원가입'}
+              </LoginBox>
             </div>
-          </div>
-        </CustomModal>
-        <br/>
-        <Button onClick={deleteSelectedPosts}>Delete Selected Posts</Button>
-      </BoardContainer>
+          </NaviBar>
+
+        
+        <BoardContainer>
+          <PostList>
+            {posts.map((post) => (
+              <PostItem key={post.id} onClick={() => togglePostContent(post.id)}>
+                {selectedPosts.includes(post.id) && (
+                  <Checkbox
+                    type="checkbox"
+                    checked={true}
+                    onChange={() => handlePostCheckboxChange(post.id)}
+                  />
+                )}
+                {!selectedPosts.includes(post.id) && (
+                  <Checkbox
+                    type="checkbox"
+                    checked={false}
+                    onChange={() => handlePostCheckboxChange(post.id)}
+                  />
+                )}
+                <PostTitle>{post.title}</PostTitle>
+                <PostContent isExpanded={post.id === expandedPostId}>
+                  {post.text}
+                </PostContent>
+              </PostItem>
+            ))}
+          </PostList>
+        
+          <Button onClick={openModal}>Create Post</Button>
+
+          <CustomModal
+            isOpen={isModalOpen}
+            onRequestClose={closeModal}
+            className="custom-Modal"
+            overlayClassName="custom-ModalOverlay"
+          >
+            <div className="modal show">
+              <div className="modal_body">
+                <h2>새 글쓰기</h2>
+                <Input
+                  type="text"
+                  name="title"
+                  value={newPost.title}
+                  onChange={handleInputChange}
+                  placeholder="Post Title"
+                />
+                <TextArea
+                  name="text"
+                  value={newPost.text}
+                  onChange={handleInputChange}
+                  placeholder="Post Content"
+                ></TextArea>
+                <Button onClick={createPost}>Create</Button>
+                <br/>
+                <Button onClick={closeModal}>Cancel</Button>
+              </div>
+            </div>
+          </CustomModal>
+          <br/>
+          <Button onClick={deleteSelectedPosts}>Delete Selected Posts</Button>
+        </BoardContainer>
+      </Wrapper>
     </>
   );
 };

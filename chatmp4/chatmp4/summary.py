@@ -19,11 +19,14 @@ def sum_func(api_key, txt_dir):
 
 
     docs = [Document(page_content=t) for t in texts[:3]]
-
-
-    chain = load_summarize_chain(llm, chain_type="map_reduce")
-    summary = chain.run(docs)
-    print(summary)
     
-    return summary
+    # 답변을 한국어로
+    prompt_template = """Write a concise summary of the following:
+    {text}
+    CONCISE SUMMARY IN KOREAN:"""
 
+    PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
+    chain = load_summarize_chain(llm, chain_type="map_reduce", map_prompt=PROMPT, combine_prompt=PROMPT)
+    # chain = load_summarize_chain(llm, chain_type="map_reduce")
+    summary = chain.run(docs)
+    return summary

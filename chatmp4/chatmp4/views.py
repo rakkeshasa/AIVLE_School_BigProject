@@ -9,8 +9,7 @@ import json
 import os
 from . import video_split_model, subject, stt_model, chat_model, summary
 from django.contrib.auth import authenticate, login
-from google.cloud import language_v1
-from google.cloud import translate_v2
+from google.cloud import language_v1, translate_v2
 from datetime import datetime
 
 
@@ -58,7 +57,6 @@ def mypage(request):
     return JsonResponse(res)
 
 
-
 # 파일 업로드 및 학습
 @csrf_exempt
 def videoUpload(request):
@@ -75,7 +73,7 @@ def videoUpload(request):
 
         # 비디오 모델 생성
         user_id = request.session.get('user_id')
-        video_title = request.POST['title']
+        video_title = str(uploadFile)[:3]
         user_email = request.session.get('user')
         user = User.objects.get(email=user_email)
 
@@ -205,7 +203,15 @@ def video2chat(request):
     current_directory = os.path.dirname(os.path.abspath(__file__))
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    
+    if output_video :
+        if '영상' in q:
+            print(output_video[0])
+        elif '보여줘' in q:
+            print(output_video[0])
+    else : print('찾는 내용이 없습니다.')
+    
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     return HttpResponse(res)

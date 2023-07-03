@@ -21,6 +21,9 @@ message : 질문을 작성
 def chat(api_key, isfirst, input_dir, vectordb_dir, n, message):
     os.environ["OPENAI_API_KEY"] = api_key
     
+    persist_directory = vectordb_dir
+    embedding = OpenAIEmbeddings() # 임베딩 방법 중 하나
+    
     # 처음 만드는 경우 텍스트를 vectordb에 저장해야함
     if isfirst==True:
         txt_path = input_dir
@@ -32,11 +35,7 @@ def chat(api_key, isfirst, input_dir, vectordb_dir, n, message):
 
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         texts = text_splitter.split_documents(documents)
-
-        persist_directory = vectordb_dir
-
-        embedding = OpenAIEmbeddings() # 임베딩 방법 중 하나
-
+        
         vectordb = Chroma.from_documents(
             documents=texts,
             embedding=embedding,
@@ -45,8 +44,7 @@ def chat(api_key, isfirst, input_dir, vectordb_dir, n, message):
         vectordb.persist()
         vectordb = None
 
-    persist_directory = vectordb_dir
-    embedding = OpenAIEmbeddings() # 임베딩 방법 중 하나
+    
     # DB가 다 만들어진 다음에는 이 코드만 실행
     vectordb = Chroma(
         persist_directory=persist_directory,
@@ -63,15 +61,24 @@ def chat(api_key, isfirst, input_dir, vectordb_dir, n, message):
 
     def process_llm_response(llm_response):
         print(llm_response['result'])
+        
         print('\n\nSources:')
+        source_name = []
         for source in llm_response["source_documents"]:
             print(source.metadata['source'])
-        return llm_response['result']
+            source_name.append(source.metadata['source'])
+        return llm_response['result'], source_name
 
 
     # 벡터 db에서 찾아서 답변함
     query = message
     llm_response = qa_chain(query)
-    process_llm_response(llm_response)
-    return process_llm_response(llm_response)
-
+    res, src = process_llm_response(llm_response)
+    
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    video_path_lst = []
+    for source in src:
+        name_only = os.path.splitext(source)[0].split('\\')[-1]
+        video_path_lst.append(os.path.join(current_directory,'test_file','video_file','output',f'{name_only}.mp4'))
+        
+    return res, video_path_lst
