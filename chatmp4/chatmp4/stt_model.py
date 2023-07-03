@@ -4,7 +4,7 @@ import requests
 
 def STT(audio_path, output_path):
     # 키 인증
-    openai.api_key = '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'
+    openai.api_key = ''
     
     f = open(audio_path, "rb")
     transcript = openai.Audio.transcribe("whisper-1", f)

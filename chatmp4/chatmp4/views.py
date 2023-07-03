@@ -118,7 +118,7 @@ def videoUpload(request):
         # list_dir = os.path.join(current_directory, 'test_file', 'text_file', 'result') # 텍스트들 받아옴
         # text_lst = os.listdir(os.path.join(current_directory, 'test_file', 'text_file', 'result')) # 텍스트 파일 제목
         # for text in text_lst:
-        #     sm_txt = summary.sum_func(api_key='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', txt_dir=os.path.join(list_dir, text))
+        #     sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(list_dir, text))
         #     print(sm_txt)
         # sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(current_directory, 'test_file', 'text_file', 'combine','temp.txt'))
         # print(sm_txt)
@@ -203,7 +203,7 @@ def signup(request):
 #     current_directory = os.path.dirname(os.path.abspath(__file__))
 #     q = str(data['question'])
 #     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-#     res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+#     res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
     
     # if output_video :
     #     if '영상' in q:
@@ -259,7 +259,7 @@ def video2chat(request):
 
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
 
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
