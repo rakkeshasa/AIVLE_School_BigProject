@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 # from django.contrib.auth.models import AbstractUser
 
@@ -9,7 +10,7 @@ class Post(models.Model):
     post_id = models.AutoField(primary_key=True)
     id2 = models.ForeignKey(User, models.DO_NOTHING, db_column='id2', blank=True, null=True)
     post_title = models.CharField(max_length=50)
-    post_date = models.DateTimeField()
+    post_date = models.DateTimeField(default=timezone.now)
     post_text = models.TextField()
     post_writer = models.CharField(max_length=45, blank=True, null=True)
 

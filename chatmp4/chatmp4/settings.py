@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "corsheaders",
     "home",
     "blog"
 ]
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "chatmp4.urls"
@@ -155,3 +157,9 @@ MEDIA_URL = '/media/'
 CUSTOM_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(CUSTOM_DIR, 'chatmp4', 'test_file', 'logical-vim-391000-b24b3db4747b.json')
+
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]
