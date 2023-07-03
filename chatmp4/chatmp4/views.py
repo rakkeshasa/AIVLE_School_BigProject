@@ -172,7 +172,7 @@ def videoUpload(request):
             stt_model.STT(input_path,output_path)
         print('stt success')  
        
-        return HttpResponse('file upload ok')
+        return HttpResponse('ok')
 
 # 회원가입
 @csrf_exempt
