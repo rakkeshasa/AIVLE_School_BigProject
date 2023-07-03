@@ -7,7 +7,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name='index.html'),name='index'),
     path("video", views.videoUpload),
-    path('blog/',include('blog.urls')),
+    path("blog/",include("blog.urls")),
     path("video2chat", views.video2chat, name='v2c'),
     path("login", views.login_view),
     path("join", views.signup),

@@ -158,8 +158,8 @@ CUSTOM_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(CUSTOM_DIR, 'chatmp4', 'test_file', 'logical-vim-391000-b24b3db4747b.json')
 
-# CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = False
 
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-# ]
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+]

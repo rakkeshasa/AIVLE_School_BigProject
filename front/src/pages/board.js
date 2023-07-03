@@ -223,6 +223,14 @@ const Board = () => {
         data: { postId }, // 삭제 요청에 필요한 데이터 전달
       };
       console.log(config); // 확인용 console.log 추가
+  
+      const response = await axios.get('http://127.0.0.1:8000/blog/get_post');
+      const selectedPost = response.data.find((post) => post.id === postId);
+      if (selectedPost.id2 !== sessionStorage.getItem('id2')) {
+        alert("게시물 삭제 권한이 없습니다.");
+        return;
+      }
+  
       await axios.delete(`http://127.0.0.1:8000/blog/delete_post/${postId}/`, config);
       const filteredPosts = posts.filter((post) => post.id !== postId);
       setPosts(filteredPosts);

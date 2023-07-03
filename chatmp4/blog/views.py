@@ -54,12 +54,12 @@ import os, json
 #         return redirect('/blog/')
 #     return render(request, 'remove_post.html', {'Post': post})
 
-
+@csrf_exempt
 def get_post(request):
-    posts = Post.objects.all().values("post_id", "id2", "post_title", "post_text")
+    posts = Post.objects.all().values("post_id", "id2", "post_title", "post_text", "post_writer")
     data = list(posts)
     transformed_data = [
-        {"id": item["post_id"], "name": item["id2"], "title": item["post_title"], "text": item["post_text"]}
+        {"id": item["post_id"], "name": item["id2"], "title": item["post_title"], "text": item["post_text"], "writer": item["post_writer"]}
         for item in data
     ]   
     return JsonResponse(transformed_data, safe=False)
