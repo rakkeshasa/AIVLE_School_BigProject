@@ -279,7 +279,6 @@ def video2chat(request):
         q = q
     else:
         q = str(load_q) + q
-
     ans = str(res) + "/"
     load_a = db_qa.answer
     if load_a == None:
