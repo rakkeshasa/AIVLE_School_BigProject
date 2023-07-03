@@ -4,14 +4,11 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 
 # 파일 업로드
 from django.core.files.storage import FileSystemStorage
 import os
-
-def chk(request):
-    print(request.user)
-    return render(request, 'loginchk.html')
 
 def post(request):
     postlist = Post.objects.all()
@@ -21,7 +18,16 @@ def posting(request, pk):
     post = Post.objects.get(pk=pk)
     return render(request, 'posting.html', {'post':post})
 
-@login_required
+
+def get_post(request):
+    posts = Post.objects.all().values("post_id", "id2", "post_title", "post_text")
+    data = list(posts)
+    transformed_data = [
+        {"id": item["post_id"], "name": item["id2"], "title": item["post_title"], "text": item["post_text"]}
+        for item in data
+    ]
+    return JsonResponse(transformed_data, safe=False)
+
 @csrf_exempt  
 def new_post(request):
     if(request.method == 'POST'):
@@ -52,7 +58,6 @@ def new_post(request):
             'post': post,
             'post_files': post_files,
         }
-
         return render(request, 'posting.html', context)
 
     return render(request, 'new_post.html')
@@ -61,5 +66,6 @@ def remove_post(request, pk):
     post = Post.objects.get(pk=pk)
     if request.method == 'POST':
         post.delete()
-        return redirect('/blog/')
-    return render(request, 'remove_post.html', {'Post': post})
+        return JsonResponse({'message': '글이 삭제되었습니다.'})
+    else :
+        return JsonResponse({'error': '글을 찾을 수 없습니다.'})

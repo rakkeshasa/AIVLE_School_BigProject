@@ -24,7 +24,7 @@ const Chatting = (props) => {
             {props.chat.map((question, index) => (
           <>
             <Question text={question}/>
-            <Answer text={props.answer[index+1]} />
+            <Answer text={props.answer[index]} />
           </>
         ))}
         </div>

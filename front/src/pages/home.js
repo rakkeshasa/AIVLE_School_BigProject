@@ -213,7 +213,8 @@ const Home = (props) => {
                         data: formData,
                     }).then(res => res ? props.setUpload(1) : props.setUpload(0))
                     props.setFilename(e.currentTarget.files[0].name);
-                    navi('/chat')
+                    props.setPage(0)
+                    navi('/mypage')
                 }}
             >  
             </input>

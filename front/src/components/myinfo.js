@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ProfileImg from '../image/profile.jpg';
-const Wrapper = styled.div`
+
+export const Wrapper = styled.div`
     width: 90vw;
     height: 100vh;
     display: flex;
@@ -16,11 +17,11 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
 `
 const Profile = styled.div`
     background-image: ${(props) => `url(${props.imageUrl})`};
-    background-size: cover;
+    background-size: 80%;
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
     width: 250px;
     height: 250px;
@@ -28,22 +29,25 @@ const Profile = styled.div`
     background-position: center;
 `
 const ProfileText = styled.div`
+    font-family: 'Nanum Gothic', sans-serif;
     width: 250px;
-    height: 50px;
+    height: 30px;
     text-align: left;
+    color: #3E363F;
+    border-bottom: solid #E5E5E5;
 `
-const Myinfo = () => {
+const Myinfo = (props) => {
     return(
         <>
             <Wrapper>
                 <Container>
                     <Profile imageUrl={ProfileImg}/>
                     <ProfileText>ID</ProfileText>
-                    <ProfileText></ProfileText>
+                    <ProfileText>{props.id}</ProfileText>
                     <ProfileText>PASSWORD</ProfileText>
-                    <ProfileText></ProfileText>
+                    <ProfileText>{props.pw}</ProfileText>
                     <ProfileText>NAME</ProfileText>
-                    <ProfileText></ProfileText>
+                    <ProfileText>{props.name}</ProfileText>
             </Container>
             </Wrapper>
         </>

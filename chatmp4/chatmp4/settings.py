@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "rTYlAaADIMTz8e6rUfeslQIrpRYmeRrLEAvN4CnRcRE"
+SECRET_KEY = ""
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -151,3 +151,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CUSTOM_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.path.join(CUSTOM_DIR, 'chatmp4', 'test_file', 'logical-vim-391000-b24b3db4747b.json')
