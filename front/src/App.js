@@ -7,6 +7,10 @@ import { useState } from 'react';
 import Home from './pages/home';
 import Join from './pages/join';
 import Mypage from './pages/mypage';
+import Board from './pages/board';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function App() {
     const [filename, setFilename] = useState()
@@ -22,6 +26,7 @@ function App() {
                     <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
                     <Route path='/join' element={<Join/>}/>
                     <Route path='/mypage' element={<Mypage/>}/>
+                    <Route path='/board' element={<Board/>}/>
                 </Routes>
             </div>
         </BrowserRouter>

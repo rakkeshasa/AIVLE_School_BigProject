@@ -118,6 +118,7 @@ const LoginBox = styled.div`
     border-radius: 10px;
     color: white;
     margin-top: 17px;
+    margin-right: 10px;
     &:hover {
         cursor: pointer;
         background-color: #D94925;
@@ -164,20 +165,32 @@ const Home = (props) => {
             <UploadBox onClick={()=>{
                     isLoggedIn ? document.getElementById('upload').click() : alert('로그인 하세요')
                 }}>비디오 업로드 하기</UploadBox>
-            <NaviBar><Logo imageUrl={logoImg}/><div className="home-top-btn-container"><LoginBox onClick={()=>{
-                if(isLoggedIn){
-                    axios.get('http://127.0.0.1:8000/logout');
-                    sessionStorage.setItem('isLoggedIn', 'false');
-                    /* eslint-disable no-restricted-globals */
-                    setTimeout(function() {
-                        location.reload();
-                      }, 1000);
-                }else {
-                    navi('/login');
-                }
-            }}>{isLoggedIn ? '로그아웃' : '로그인'}</LoginBox>
-            <LoginBox onClick={()=>{
-                isLoggedIn ? navi('/mypage') : navi('/join')}}>{isLoggedIn ? '마이페이지' : '회원가입'}</LoginBox></div></NaviBar>
+            <NaviBar><Logo imageUrl={logoImg}/>
+                <div className="home-top-btn-container">
+                    <LoginBox onClick={()=>{
+                        if(isLoggedIn){
+                            axios.get('http://127.0.0.1:8000/logout');
+                            sessionStorage.setItem('isLoggedIn', 'false');
+                            /* eslint-disable no-restricted-globals */
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }else {
+                            navi('/login');
+                        }
+                    }}>{isLoggedIn ? '로그아웃' : '로그인'}
+                    </LoginBox>
+                    <LoginBox onClick={()=>{
+                        isLoggedIn ? navi('/mypage') : navi('/join')}}>{isLoggedIn ? '마이페이지' : '회원가입'}
+                    </LoginBox>
+                    <LoginBox onClick={() => {
+                        navi('/board')
+                        }}>
+                        게시판
+                    </LoginBox>
+                </div>
+                
+            </NaviBar>
             <Box height='93vh' className="box">
                 <ImgWrapper imageUrl={backgroundImg}/>
                 <TextContainer className="text" ref={textContainersRef.current[0]} animate={first}>

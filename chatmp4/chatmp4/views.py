@@ -11,6 +11,7 @@ from . import video_split_model
 from . import stt_model
 from . import chat_model
 from django.contrib.auth import authenticate, login
+from django.core.serializers import serialize
 
 
 def test(request) :
@@ -51,27 +52,18 @@ def post(request) :
 def login_view(request):
     data = json.loads(request.body)
     if User.objects.filter(email = data['id']).exists():
-        # login(request, username=data['id'], password=data['pwd'])
-        # user = authenticate(request, username=data['id'], password=data['pwd'])
         getUser = User.objects.get(email = data['id'])
- 
         if getUser.password == data['pwd']:
             request.session['user'] = data['id']
-            return JsonResponse({'status': True,
-                                 'session_id': request.session.get('user')})
+            request.session['id2'] = getUser.id
+            return JsonResponse({
+                'status': True,
+                'session_id': request.session.get('user'),
+                'id2': request.session.get('id2'),
+            })
         else:
-            # request.session['loginOk'] = False
-            # context = {
-            #     "result": "아이디 또는 비밀번호가 올바르지 않습니다."
-            # }
-            # return JsonResponse({'error': 'wrong_idpw'}, status=400)
             return JsonResponse({'status': '아이디 또는 비밀번호가 올바르지 않습니다.'})
     else:
-    #     request.session['loginOk'] = False
-    #     context = {
-    #         "result": "존재하지 않는 id입니다."
-    #     }
-    # return JsonResponse({'error': '잘못된 요청입니다.'}, status=405)  
         return JsonResponse({'status': '존재하지 않는 id입니다.'})
     
 def logout(request):
@@ -286,3 +278,4 @@ def video2chat(request):
 #         post.delete()
 #         return redirect('/blog/')
 #     return render(request, 'remove_post.html', {'Post': post})
+
