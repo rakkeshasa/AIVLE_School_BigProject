@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from blog.models import Post, User, Video
 # from django.contrib.auth.models import User
@@ -226,39 +226,37 @@ def chat(request):
     print('chat success')
     return HttpResponse(res)
 
+
 # @csrf_exempt
-# def
+# def video2chat(request):
+#     #응답 받기
+#     data = json.loads(request.body)
+#     print(data)
 
-@csrf_exempt
-def video2chat(request):
-    #응답 받기
-    data = json.loads(request.body)
-    print(data)
+#     # video split
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     # input_fath = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
+#     # output_fath = os.path.join(current_directory,'test_file','video_file','output')
+#     # tt = video_split_model.get_video_duration(input_fath)
+#     # video_split_model.split_video(input_fath, output_fath, tt, 30)
+#     # print('split success')
 
-    # video split
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    # input_fath = os.path.join(current_directory,'test_file','video_file','input','ttt.mp4') # 비디오 경로 수정
-    # output_fath = os.path.join(current_directory,'test_file','video_file','output')
-    # tt = video_split_model.get_video_duration(input_fath)
-    # video_split_model.split_video(input_fath, output_fath, tt, 30)
-    # print('split success')
-
-    # # stt
-    # chatmp4_files = os.listdir(os.path.join(current_directory, 'test_file','video_file','output'))
-    # for chatmp4_file in chatmp4_files:
-    #     input_path = os.path.join(current_directory,'test_file','video_file','output',chatmp4_file)
-    #     output_name = os.path.splitext(chatmp4_file)[0]
-    #     output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
+#     # # stt
+#     # chatmp4_files = os.listdir(os.path.join(current_directory, 'test_file','video_file','output'))
+#     # for chatmp4_file in chatmp4_files:
+#     #     input_path = os.path.join(current_directory,'test_file','video_file','output',chatmp4_file)
+#     #     output_name = os.path.splitext(chatmp4_file)[0]
+#     #     output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
    
-    #     stt_model.STT(input_path,output_path)
-    # print('stt success')  
+#     #     stt_model.STT(input_path,output_path)
+#     # print('stt success')  
 
-    q = str(data['question'])
-    txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
-    print('chat success')
-    # return JsonResponse({'result': res, 'message': '답변 성공'})
-    return HttpResponse(res)
+#     q = str(data['question'])
+#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+#     res = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+#     print('chat success')
+#     # return JsonResponse({'result': res, 'message': '답변 성공'})
+#     return HttpResponse(res)
 
 # def post(request):
 #     postlist = Post.objects.all()
@@ -348,3 +346,39 @@ def getChat(request):
 #     video.answer = ans
 #     video.save()
 #     return HttpResponse(res)
+
+@csrf_exempt
+def video2chat(request):
+    #응답 받기
+    data = json.loads(request.body)
+    video_id = request.session.get('uploaded_video_id')
+    print(video_id)
+    # video split
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    print(current_directory)
+    q = str(data['question'])
+    txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+    res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    print('chat success')
+    # return JsonResponse({'result': res, 'message': '답변 성공'})
+    # return HttpResponse(res)
+    # db에 question , answer 에 / 붙여서 넣기
+    q = q + "/"
+    db_qa = Video.objects.get(video_id = video_id)
+    load_q = db_qa.question
+    if load_q == None:
+        q = q
+    else:
+        q = str(load_q) + q
+    ans = str(res) + "/"
+    load_a = db_qa.answer
+    if load_a == None:
+        ans = ans
+    else:
+        ans = str(load_a) + ans
+    video = get_object_or_404(Video, video_id=video_id)
+    video.question = q
+    video.answer = ans
+    video.save()
+
+    return HttpResponse(res)

@@ -100,20 +100,25 @@ const Mypage = (props) => {
                     <span class="material-symbols-outlined">forum</span>
                     </IconWrapper>
                     <IconWrapper>
-                    <TextWrapper ref={categorypage} onClick={()=>{props.setPage(1)}}>Category</TextWrapper>
+                    <TextWrapper ref={categorypage} onClick={()=>{
+                        axios.get('http://127.0.0.1:8000/getCategory')
+                        .then((res)=>{
+                            
+                        })
+                        props.setPage(1)}}>Category</TextWrapper>
                     <span class="material-symbols-outlined">category</span>
                     </IconWrapper>
                     <IconWrapper>
                     <TextWrapper ref={logpage} onClick={()=>{
                         props.setPage(2)
-                        // axios({
-                        //     method: 'get',
-                        //     url: 'http://127.0.0.1:8000/getLog'
-                        // }).then((res) => {
-                        //     setName(res.data['id'])
-                        //     setTitle(res.data['title'])
-                        //     setCategory(res.data['category'])
-                        // })
+                        axios({
+                            method: 'get',
+                            url: 'http://127.0.0.1:8000/getLog'
+                        }).then((res) => {
+                            setName(res.data['id'])
+                            setTitle(res.data['title'])
+                            setCategory(res.data['category'])
+                        })
                         }}>Log</TextWrapper>
                     <span class="material-symbols-outlined">contract_edit</span>
                     </IconWrapper>

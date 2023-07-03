@@ -26,64 +26,140 @@ const TextBox = styled.div`
     align-items: center;
     font-family: 'Nanum Gothic', sans-serif;
 `
-const option =  {
-    series: [14, 23, 21, 17, 15, 10, 12, 17, 21],
+  
+const Categroy = () => {
+
+        
+  const option = {
+    series: [76, 67, 61, 90],
     chart: {
-    type: 'polarArea',
+    height: 390,
+    type: 'radialBar',
   },
-  stroke: {
-    colors: ['#fff']
+  plotOptions: {
+    radialBar: {
+      offsetY: 0,
+      startAngle: 30,
+      endAngle: 270,
+      hollow: {
+        margin: 5,
+        size: '30%',
+        background: 'transparent',
+        image: undefined,
+      },
+      dataLabels: {
+        name: {
+          show: false,
+        },
+        value: {
+          show: false,
+        }
+      }
+    }
   },
-  fill: {
-    opacity: 0.8
+  colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
+  labels: ['Vimeo', 'Messenger', 'Facebook', 'LinkedIn'],
+  legend: {
+    show: true,
+    floating: true,
+    fontSize: '10px',
+    position: 'left',
+    offsetX: 140,
+    offsetY: 15,
+    labels: {
+      useSeriesColors: true,
+    },
+    markers: {
+      size: 0
+    },
+    formatter: function(seriesName, opts) {
+      return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
+    },
+    itemMargin: {
+      vertical: 3
+    }
   },
   responsive: [{
     breakpoint: 480,
     options: {
-      chart: {
-        width: 200
-      },
       legend: {
-        position: 'bottom'
+          show: false
       }
     }
   }]
   };
 
-  const option02 ={
+  const colors = [
+    '#3B93A5',
+    '#F7B844',
+    '#ADD8C7',
+    '#EC3C65',
+    '#CDD7B6',
+    '#C1F666',
+    '#D43F97',
+    '#1E5D8C',
+    '#421243',
+    '#7F94B0',
+    '#EF6537',
+    '#C0ADDB'
+  ]
+
+  const option02 = {
     series: [{
-    data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+    data: [21, 22, 10, 28, 16, 21, 13, 30]
   }],
     chart: {
+    height: 350,
     type: 'bar',
-    height: 350
+    events: {
+      click: function(chart, w, e) {
+        // console.log(chart, w, e)
+      }
+    }
   },
+  colors: colors,
   plotOptions: {
     bar: {
-      borderRadius: 4,
-      horizontal: true,
+      columnWidth: '45%',
+      distributed: true,
     }
   },
   dataLabels: {
     enabled: false
   },
+  legend: {
+    show: false
+  },
   xaxis: {
-    categories: ['South Korea', 'Canada', 'United Kingdom', 'Netherlands', 'Italy', 'France', 'Japan',
-      'United States', 'China', 'Germany'
+    categories: [
+      ['John', 'Doe'],
+      ['Joe', 'Smith'],
+      ['Jake', 'Williams'],
+      'Amber',
+      ['Peter', 'Brown'],
+      ['Mary', 'Evans'],
+      ['David', 'Wilson'],
+      ['Lily', 'Roberts'], 
     ],
+    labels: {
+      style: {
+        colors: [],
+        fontSize: '12px'
+      }
+    }
   }
   };
-const Categroy = () => {
+
     return(
         <>
             <Wrapper>
                 <ChartContainer>
                     <TextBox>사용자가 업로드 한 강의 카테고리</TextBox>
-                    <ApexCharts options={option} series={option.series} type="polarArea"  width={500} height={300}/>
+                    <ApexCharts options={option} series={option.series} type="radialBar"  width={550} height={350}/>
         </ChartContainer>
                 <ChartContainer>
                     <TextBox>Top 10 카테고리</TextBox>
-                    <ApexCharts options={option02} series={option02.series} type="bar" width={500} height={300}/>
+                    <ApexCharts options={option02} series={option02.series} type="bar" width={550} height={350}/>
                 </ChartContainer>
             </Wrapper>
         </>

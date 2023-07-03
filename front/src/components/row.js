@@ -8,7 +8,6 @@ const Container = styled.div`
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: solid;
 `
 const Title = styled.div`
     width: 400px;
