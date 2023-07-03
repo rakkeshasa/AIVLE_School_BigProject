@@ -275,20 +275,21 @@ def video2chat(request):
             print(output_video[0])
     else : print('찾는 내용이 없습니다.')
 
-    q = q + "/"
+
     db_qa = Video.objects.get(video_id = video_id)
     load_q = db_qa.question
 
     if load_q == None:
         q = q
     else:
-        q = str(load_q) + q
-    ans = str(res) + "/"
+        q = str(load_q) + "/" + q
+
+    ans = str(res)
     load_a = db_qa.answer
     if load_a == None:
         ans = ans
     else:
-        ans = str(load_a) + ans
+        ans = str(load_a) + "/" + ans
     video = get_object_or_404(Video, video_id=video_id)
     video.question = q
     video.answer = ans
