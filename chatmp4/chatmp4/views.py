@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from blog.models import Post, Video
 from django.contrib.auth.models import User
@@ -115,11 +115,11 @@ def videoUpload(request):
         print('stt success')
 
         # summary
-        list_dir = os.path.join(current_directory, 'test_file', 'text_file', 'result') # 텍스트들 받아옴
-        text_lst = os.listdir(os.path.join(current_directory, 'test_file', 'text_file', 'result')) # 텍스트 파일 제목
-        for text in text_lst:
-            sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(list_dir, text))
-            print(sm_txt)
+        # list_dir = os.path.join(current_directory, 'test_file', 'text_file', 'result') # 텍스트들 받아옴
+        # text_lst = os.listdir(os.path.join(current_directory, 'test_file', 'text_file', 'result')) # 텍스트 파일 제목
+        # for text in text_lst:
+        #     sm_txt = summary.sum_func(api_key='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', txt_dir=os.path.join(list_dir, text))
+        #     print(sm_txt)
         # sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(current_directory, 'test_file', 'text_file', 'combine','temp.txt'))
         # print(sm_txt)
 
@@ -193,57 +193,29 @@ def signup(request):
         return HttpResponse(True)
 
 
-@csrf_exempt
-def video2chat(request):
-    #응답 받기
-    data = json.loads(request.body)
-    video_id = request.session.get('uploaded_video_id')
-    print(video_id)
+# @csrf_exempt
+# def video2chat(request):
+#     #응답 받기
+#     data = json.loads(request.body)
+#     video_id = request.session.get('uploaded_video_id')
+#     print(video_id)
 
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-    q = str(data['question'])
-    txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     q = str(data['question'])
+#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+#     res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
     
-    if output_video :
-        if '영상' in q:
-            print(output_video[0])
-        elif '보여줘' in q:
-            print(output_video[0])
-    else : print('찾는 내용이 없습니다.')
+    # if output_video :
+    #     if '영상' in q:
+    #         print(output_video[0])
+    #     elif '보여줘' in q:
+    #         print(output_video[0])
+    # else : print('찾는 내용이 없습니다.')
     
-    print('chat success')
-    # return JsonResponse({'result': res, 'message': '답변 성공'})
-    return HttpResponse(res)
+#     print('chat success')
+#     # return JsonResponse({'result': res, 'message': '답변 성공'})
+#     return HttpResponse(res)
 
-# def post(request):
-#     postlist = Post.objects.all()
-#     return render(request, 'blog.html', {'postlist': postlist})
-
-# def posting(request, pk):
-#     post = Post.objects.get(pk=pk)
-#     return render(request, 'posting.html', {'post':post})
-
-# @csrf_exempt  
-# def new_post(request):
-#     if(request.method == 'POST'):
-#         post = Post()
-#         if request.user.is_authenticated:
-#             post.id2 = request.user
-
-#         post.post_title = request.POST['postname']
-#         post.post_text = request.POST['contents']
-#         post.post_date = timezone.now()
-#         post.save()
-
-#     return render(request, 'new_post.html')
-
-# def remove_post(request, pk):
-#     post = Post.objects.get(pk=pk)
-#     if request.method == 'POST':
-#         post.delete()
-#         return redirect('/blog/')
-#     return render(request, 'remove_post.html', {'Post': post})
 
 def getLog(request):
     user_id = request.session.get('user_id')
@@ -275,32 +247,48 @@ def getChat(request):
     
     return HttpResponse('데이터 없음')
 
-# @csrf_exempt
-# def video2chat(request):
-#     #응답 받기
-#     video_id = request.session.get('uploaded_video_id')
-#     print(video_id)
-#     data = json.loads(request.body)
-#     video_id = request.session.get('uploaded_video_id')
-#     print(video_id)
-#     # video split
-#     current_directory = os.path.dirname(os.path.abspath(__file__))
-#     print(current_directory)
-#     q = str(data['question'])
-#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-#     res = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
-#     print('chat success')
-#     # return JsonResponse({'result': res, 'message': '답변 성공'})
-#     # db에 question , answer 에 / 붙여서 넣기
-#     q = q + "/"
-#     db_qa = Video.objects.get(video_id = video_id)
-#     load_q = db_qa.question
-#     q = load_q + q
-#     ans = str(res) + "/"
-#     load_a = db_qa.answer
-#     ans = load_a + ans
-#     video = get_object_or_404(Video, video_id=video_id)
-#     video.question = q
-#     video.answer = ans
-#     video.save()
-#     return HttpResponse(res)
+@csrf_exempt
+def video2chat(request):
+    #응답 받기
+    data = json.loads(request.body)
+    video_id = request.session.get('uploaded_video_id')
+    print(video_id)
+    # video split
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    print(current_directory)
+
+    q = str(data['question'])
+    txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+    res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+
+    print('chat success')
+    # return JsonResponse({'result': res, 'message': '답변 성공'})
+    # return HttpResponse(res)
+    # db에 question , answer 에 / 붙여서 넣기
+
+    if output_video :
+        if '보여줘' in q:
+            print(output_video[0])
+    else : print('찾는 내용이 없습니다.')
+
+    q = q + "/"
+    db_qa = Video.objects.get(video_id = video_id)
+    load_q = db_qa.question
+
+    if load_q == None:
+        q = q
+    else:
+        q = str(load_q) + q
+
+    ans = str(res) + "/"
+    load_a = db_qa.answer
+    if load_a == None:
+        ans = ans
+    else:
+        ans = str(load_a) + ans
+    video = get_object_or_404(Video, video_id=video_id)
+    video.question = q
+    video.answer = ans
+    video.save()
+
+    return HttpResponse(res)
