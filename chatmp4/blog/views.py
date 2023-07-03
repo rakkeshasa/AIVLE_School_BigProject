@@ -54,7 +54,7 @@ import os, json
 #         return redirect('/blog/')
 #     return render(request, 'remove_post.html', {'Post': post})
 
-@csrf_exempt
+
 def get_post(request):
     posts = Post.objects.all().values("post_id", "id2", "post_title", "post_text", "post_writer")
     data = list(posts)

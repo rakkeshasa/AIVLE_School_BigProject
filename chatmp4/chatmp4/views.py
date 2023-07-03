@@ -12,7 +12,7 @@ from django.contrib.auth import authenticate, login
 from google.cloud import language_v1, translate_v2
 from datetime import datetime
 from django.core.serializers import serialize
-
+from kobart.test_model import summary_kobart
 
 def test(request) :
     return HttpResponse("hello world")
@@ -105,7 +105,7 @@ def videoUpload(request):
         input_path = os.path.join(file_path) # 비디오 경로 수정
         output_path = os.path.join(current_directory,'test_file','video_file','output')
         tt = video_split_model.get_video_duration(input_path)
-        video_split_model.split_video(input_path, output_path, tt, 30)
+        video_split_model.split_video(input_path, output_path, tt, 60)
         print('split success')
 
         # stt
@@ -119,13 +119,25 @@ def videoUpload(request):
         print('stt success')
 
         # summary
-        # list_dir = os.path.join(current_directory, 'test_file', 'text_file', 'result') # 텍스트들 받아옴
-        # text_lst = os.listdir(os.path.join(current_directory, 'test_file', 'text_file', 'result')) # 텍스트 파일 제목
-        # for text in text_lst:
-        #     sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(list_dir, text))
-        #     print(sm_txt)
-        # sm_txt = summary.sum_func(api_key='', txt_dir=os.path.join(current_directory, 'test_file', 'text_file', 'combine','temp.txt'))
-        # print(sm_txt)
+        list_dir = os.path.join(current_directory, 'test_file', 'text_file', 'result') # 텍스트들 받아옴
+        text_lst = os.listdir(os.path.join(current_directory, 'test_file', 'text_file', 'result')) # 텍스트 파일 제목
+        summary_lst = []
+        for text in text_lst:
+            txt = ''
+            with open(os.path.join(list_dir,text),'r', encoding='utf-8') as f:
+                txt = f.read()
+                sm_txt = summary_kobart(txt)
+                # summary_lst.append(sm_txt)
+                print(sm_txt)
+        
+        # st = ''.join(summary_lst)
+        # print(st)
+        # total_summary = summary_kobart(st)
+        # print(total_summary)
+
+        translation_s = translate_client.translate(total_summary, target_language='ko') #텍스트 한국어로 번역
+        translated_text_s = translation['translation_s']
+        print(translated_text_s)
 
         # category
         current_directory = os.path.dirname(os.path.abspath(__file__))
