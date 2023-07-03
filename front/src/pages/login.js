@@ -208,10 +208,11 @@ const Login = (props) =>{
                              'pwd' : password.current.value
                          }
                      }).then((res)=>{
-                        if(res.data['status'] == true){
+                        if(res.data['status'] === true){
                             props.setUserlogin(true)
                             sessionStorage.setItem('isLoggedIn', 'true')
                             sessionStorage.setItem('userId', res.data['session_id'])
+                            sessionStorage.setItem('id2', res.data['id2'])
                             navi('/');
                         }else{
                             setStatus(res.data['status'])
