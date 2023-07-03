@@ -49,10 +49,10 @@ def logout(request):
 
 def mypage(request): 
     user_id = request.session.get('user')
-    getUser = User.objects.filter(email = user_id)
-    res = {'id': getUser.email,
+    getUser = User.objects.get(email = user_id)
+    res = {'id' : getUser.email,
            'password': getUser.password,
-           'name' : getUser.name}
+           'name': getUser.username}
     print(res)
     return JsonResponse(res)
 
@@ -215,3 +215,92 @@ def video2chat(request):
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     return HttpResponse(res)
+
+# def post(request):
+#     postlist = Post.objects.all()
+#     return render(request, 'blog.html', {'postlist': postlist})
+
+# def posting(request, pk):
+#     post = Post.objects.get(pk=pk)
+#     return render(request, 'posting.html', {'post':post})
+
+# @csrf_exempt  
+# def new_post(request):
+#     if(request.method == 'POST'):
+#         post = Post()
+#         if request.user.is_authenticated:
+#             post.id2 = request.user
+
+#         post.post_title = request.POST['postname']
+#         post.post_text = request.POST['contents']
+#         post.post_date = timezone.now()
+#         post.save()
+
+#     return render(request, 'new_post.html')
+
+# def remove_post(request, pk):
+#     post = Post.objects.get(pk=pk)
+#     if request.method == 'POST':
+#         post.delete()
+#         return redirect('/blog/')
+#     return render(request, 'remove_post.html', {'Post': post})
+
+def getLog(request):
+    user_id = request.session.get('user_id')
+    print(user_id)
+    videoList = Video.objects.filter(id = user_id)
+    title = [video.video_title for video in videoList]
+    category = [video.category for video in videoList]
+    data = {'id' : user_id,
+            'title': title,
+            'category': category}
+    return JsonResponse(data)
+
+
+def getChat(request):
+    user_id = request.session.get('user_id')
+    idx = request.GET.get('idx', None)
+    idx = int(idx)
+    if user_id is not None and idx is not None:
+        videos = Video.objects.filter(id=user_id)
+        if videos.exists() and idx < len(videos):
+            video = videos[idx]
+            answer = video.answer.split('/')
+            question = video.question.split('/')
+            response = {
+                'answer': answer,
+                'question': question
+            }
+            return JsonResponse(response)
+    
+    return HttpResponse('데이터 없음')
+
+# @csrf_exempt
+# def video2chat(request):
+#     #응답 받기
+#     video_id = request.session.get('uploaded_video_id')
+#     print(video_id)
+#     data = json.loads(request.body)
+#     video_id = request.session.get('uploaded_video_id')
+#     print(video_id)
+#     # video split
+#     current_directory = os.path.dirname(os.path.abspath(__file__))
+#     print(current_directory)
+#     q = str(data['question'])
+#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
+#     res = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+#     print('chat success')
+#     # return JsonResponse({'result': res, 'message': '답변 성공'})
+#     # db에 question , answer 에 / 붙여서 넣기
+#     q = q + "/"
+#     db_qa = Video.objects.get(video_id = video_id)
+#     load_q = db_qa.question
+#     q = load_q + q
+#     ans = str(res) + "/"
+#     load_a = db_qa.answer
+#     ans = load_a + ans
+#     video = get_object_or_404(Video, video_id=video_id)
+#     video.question = q
+#     video.answer = ans
+#     video.save()
+#     return HttpResponse(res)
