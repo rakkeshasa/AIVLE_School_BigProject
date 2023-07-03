@@ -9,6 +9,9 @@ import Join from './pages/join';
 import Mypage from './pages/mypage';
 import Board from './pages/board';
 import Loading from './components/loading';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#root');
 
 function App() {
     const [filename, setFilename] = useState()

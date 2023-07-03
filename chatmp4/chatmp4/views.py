@@ -11,6 +11,7 @@ from . import video_split_model, subject, stt_model, chat_model, summary
 from django.contrib.auth import authenticate, login
 from google.cloud import language_v1, translate_v2
 from datetime import datetime
+from django.core.serializers import serialize
 
 
 def test(request) :
@@ -30,12 +31,15 @@ def login_view(request):
         getUser = User.objects.get(email = data['id'])
 
         if getUser.password == data['pwd']:
-            request.session['user'] = data['id'] #유저email
+            request.session['user'] = data['id']
             request.session['username'] = getUser.username # 작성자명
             request.session['user_id'] = getUser.id # 유저ID
-            print(getUser.id)
-            return JsonResponse({'status': True,
-                                 'session_id': request.session.get('user')})
+            request.session['id2'] = getUser.id
+            return JsonResponse({
+                'status': True,
+                'session_id': request.session.get('user'),
+                'id2': request.session.get('id2'),
+            })
         else:
             return JsonResponse({'status': '아이디 또는 비밀번호가 올바르지 않습니다.'})
     else:
