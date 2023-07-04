@@ -79,6 +79,8 @@ def chat(api_key, isfirst, input_dir, vectordb_dir, n, message):
     video_path_lst = []
     for source in src:
         name_only = os.path.splitext(source)[0].split('\\')[-1]
-        video_path_lst.append(os.path.join(current_directory,'test_file','video_file','output',f'{name_only}.mp4'))
-        
+        video_path_lst.append('/client/static/videos/output/'+f'{name_only}.mp4')
+    
+    # video_path = '/client/static/videos/output'+str(name_only)+'.mp4'
+    '/static/videos/sample.mp4'
     return res, video_path_lst

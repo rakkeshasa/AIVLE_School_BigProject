@@ -27,11 +27,10 @@ const TextBox = styled.div`
     font-family: 'Nanum Gothic', sans-serif;
 `
   
-const Categroy = () => {
+const Categroy = (props) => {
 
-        
   const option = {
-    series: [76, 67, 61, 90],
+    series: props.categorycount,
     chart: {
     height: 390,
     type: 'radialBar',
@@ -58,7 +57,7 @@ const Categroy = () => {
     }
   },
   colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
-  labels: ['Vimeo', 'Messenger', 'Facebook', 'LinkedIn'],
+  labels: props.categorydata,
   legend: {
     show: true,
     floating: true,
@@ -149,6 +148,7 @@ const Categroy = () => {
     }
   }
   };
+  console.log(props.categorycount);
 
     return(
         <>

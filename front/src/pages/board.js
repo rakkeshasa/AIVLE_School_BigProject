@@ -272,7 +272,7 @@ const Board = () => {
           <PostList>
             {posts.map((post) => (
               <PostItem key={post.id}>
-                <PostTitle onClick={() => togglePostContent(post.id)}>{post.title} {post.writer}</PostTitle>
+                <PostTitle onClick={() => togglePostContent(post.id)}>{post.title}{post.writer}</PostTitle>
                   <PostContent isExpanded={post.id === expandedPostId}>
                     {post.text}
                   </PostContent>

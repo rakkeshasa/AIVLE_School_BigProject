@@ -54,6 +54,8 @@ const Mypage = (props) => {
     const [answer, setAnswer] = useState([]);
     const [chat, setChat] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [categorydata, setCategorydata] = useState([]);
+    const [categorycount, setCategorycount] = useState([]);
     
     useEffect(()=>{
         if(props.page === 0){
@@ -103,8 +105,9 @@ const Mypage = (props) => {
                     <TextWrapper ref={categorypage} onClick={()=>{
                         axios.get('http://127.0.0.1:8000/getCategory')
                         .then((res)=>{
-                            
-                        })
+                            setCategorydata(res.data.categories)
+                            setCategorycount(res.data.counts)
+                            })
                         props.setPage(1)}}>Category</TextWrapper>
                     <span class="material-symbols-outlined">category</span>
                     </IconWrapper>
@@ -136,7 +139,8 @@ const Mypage = (props) => {
                     </IconWrapper>
                 </MyPageLeftBar>
                 {props.page === 0 && <Chat answer={answer} setAnswer={setAnswer} chat={chat} setChat={setChat}/>}
-                {props.page === 1 && <Categroy/>}
+                {props.page === 1 && <Categroy categorydata={categorydata} categorycount={categorycount}/>}
+                {/* {props.page === 1 && <Categroy />} */}
                 {props.page === 2 && <Log title={title} category={category} name={name} setAnswer={setAnswer} setChat={setChat} setPage={props.setPage} page={props.page}/>}
                 {props.page === 3 && <Myinfo id={id} pw={pw} name={name}/>}
                 {loading && <Loading/>}

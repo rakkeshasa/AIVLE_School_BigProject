@@ -13,6 +13,7 @@ from google.cloud import language_v1, translate_v2
 from datetime import datetime
 from django.core.serializers import serialize
 from kobart.test_model import summary_kobart
+from django.db.models import Count
 
 def test(request) :
     return HttpResponse("hello world")
@@ -83,7 +84,7 @@ def videoUpload(request):
 
         # video_file, result 폴더 내 파일 삭제
         current_directory = os.path.dirname(os.path.abspath(__file__)) 
-        video_directory = os.path.join(current_directory, 'test_file', 'video_file', 'output')
+        video_directory = os.path.join(current_directory,'..','client','videos','output')
         text_directory = os.path.join(current_directory, 'test_file', 'text_file', 'result')
         
         # 디렉토리 내의 모든 파일 삭제
@@ -103,18 +104,18 @@ def videoUpload(request):
         # 동영상 학습
         current_directory = os.path.dirname(os.path.abspath(__file__))
         input_path = os.path.join(file_path) # 비디오 경로 수정
-        output_path = os.path.join(current_directory,'test_file','video_file','output')
+        output_path = os.path.join(current_directory,'..','client','videos','output')
         tt = video_split_model.get_video_duration(input_path)
-        video_split_model.split_video(input_path, output_path, tt, 60)
+        video_split_model.split_video(input_path, output_path, tt, 180)
         print('split success')
 
         # stt
-        chatmp4_files = os.listdir(os.path.join(current_directory, 'test_file','video_file','output'))
+        chatmp4_files = os.listdir(os.path.join(current_directory,'..','client','videos','output'))
         for chatmp4_file in chatmp4_files:
-            input_path = os.path.join(current_directory,'test_file','video_file','output', chatmp4_file)
+            input_path = os.path.join(current_directory,'..','client','videos','output', chatmp4_file)
             output_name = os.path.splitext(chatmp4_file)[0]
             output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
-    
+
             stt_model.STT(input_path,output_path)
         print('stt success')
 
@@ -127,17 +128,17 @@ def videoUpload(request):
             with open(os.path.join(list_dir,text),'r', encoding='utf-8') as f:
                 txt = f.read()
                 sm_txt = summary_kobart(txt)
-                # summary_lst.append(sm_txt)
-                print(sm_txt)
-        
+                summary_lst.append(sm_txt)
+                st = ''.join(summary_lst)
+        print(st)
         # st = ''.join(summary_lst)
         # print(st)
         # total_summary = summary_kobart(st)
         # print(total_summary)
 
-        translation_s = translate_client.translate(total_summary, target_language='ko') #텍스트 한국어로 번역
-        translated_text_s = translation['translation_s']
-        print(translated_text_s)
+        # translation_s = translate_client.translate(total_summary, target_language='ko') #텍스트 한국어로 번역
+        # translated_text_s = translation['translation_s']
+        # print(translated_text_s)
 
         # category
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -184,7 +185,8 @@ def videoUpload(request):
         if os.path.exists(db_directory):
             shutil.rmtree(db_directory)
         
-        return HttpResponse('file upload ok')
+        data = {'summary' : st}
+    return JsonResponse(data)
 
 # 회원가입
 @csrf_exempt
@@ -207,31 +209,6 @@ def signup(request):
             'result':'signup'
         }
         return HttpResponse(True)
-
-
-# @csrf_exempt
-# def video2chat(request):
-#     #응답 받기
-#     data = json.loads(request.body)
-#     video_id = request.session.get('uploaded_video_id')
-#     print(video_id)
-
-#     current_directory = os.path.dirname(os.path.abspath(__file__))
-#     q = str(data['question'])
-#     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-#     res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
-    
-    # if output_video :
-    #     if '영상' in q:
-    #         print(output_video[0])
-    #     elif '보여줘' in q:
-    #         print(output_video[0])
-    # else : print('찾는 내용이 없습니다.')
-    
-#     print('chat success')
-#     # return JsonResponse({'result': res, 'message': '답변 성공'})
-#     return HttpResponse(res)
-
 
 def getLog(request):
     user_id = request.session.get('user_id')
@@ -263,6 +240,28 @@ def getChat(request):
     
     return HttpResponse('데이터 없음')
 
+
+def getCategory(request):
+    user_id = request.session.get('user_id')
+    video_statistics = (
+        Video.objects.filter(id=user_id)
+        .values('category')
+        .annotate(category_count=Count('category'))
+        .order_by('-category_count') #큰 순으로
+    )
+
+    categories = [item['category'] for item in video_statistics]
+    counts = [item['category_count'] for item in video_statistics]
+    print(categories, counts)
+
+    data = {
+        'user_id': user_id,
+        'categories': categories,
+        'counts': counts
+    }
+    return JsonResponse(data)
+
+
 @csrf_exempt
 def video2chat(request):
     #응답 받기
@@ -275,7 +274,7 @@ def video2chat(request):
 
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
 
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
