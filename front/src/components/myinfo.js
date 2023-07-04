@@ -36,6 +36,17 @@ const ProfileText = styled.div`
     color: #3E363F;
     border-bottom: solid #E5E5E5;
 `
+const ProfilePw = styled.input.attrs({
+    type: 'password',
+  })`
+    font-family: 'Nanum Gothic', sans-serif;
+    width: 250px;
+    height: 30px;
+    text-align: left;
+    color: #3E363F;
+    outline: none;
+    border-bottom: solid #E5E5E5;
+  `;
 const Myinfo = (props) => {
     return(
         <>
@@ -45,7 +56,7 @@ const Myinfo = (props) => {
                     <ProfileText>ID</ProfileText>
                     <ProfileText>{props.id}</ProfileText>
                     <ProfileText>PASSWORD</ProfileText>
-                    <ProfileText>{props.pw}</ProfileText>
+                    <ProfilePw value={props.pw}></ProfilePw>
                     <ProfileText>NAME</ProfileText>
                     <ProfileText>{props.name}</ProfileText>
             </Container>

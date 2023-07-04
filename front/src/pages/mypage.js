@@ -53,8 +53,9 @@ const Mypage = (props) => {
     const [name, setName] = useState();
     const [answer, setAnswer] = useState([]);
     const [chat, setChat] = useState([]);
-    const [loading, setLoading] = useState(true);
     
+    console.log(props.upload);
+
     useEffect(()=>{
         if(props.page === 0){
             chatpage.current.style.color = '#FD6F22';
@@ -66,19 +67,19 @@ const Mypage = (props) => {
             categorypage.current.style.color = '#FD6F22';
             logpage.current.style.color = 'white';
             myinfopage.current.style.color = 'white';
-            setLoading(false)
+            props.setUpload(1)
         }else if(props.page === 2){
             chatpage.current.style.color = 'white';
             categorypage.current.style.color = 'white';
             logpage.current.style.color = '#FD6F22';
             myinfopage.current.style.color = 'white';
-            setLoading(false)
+            props.setUpload(1)
         }else {
             chatpage.current.style.color = 'white';
             categorypage.current.style.color = 'white';
             logpage.current.style.color = 'white';
             myinfopage.current.style.color = '#FD6F22';
-            setLoading(false)
+            props.setUpload(1)
         }
     })
     return(
@@ -89,7 +90,7 @@ const Mypage = (props) => {
                     <TextWrapper onClick={()=>{
                         navi('/')
                     }}>Home</TextWrapper>
-                    <span class="material-symbols-outlined" onClick={()=>{setLoading(false)}}>Home</span>
+                    <span class="material-symbols-outlined" onClick={()=>{props.setUpload(1)}}>Home</span>
                     </IconWrapper>
                     <IconWrapper>
                     <TextWrapper ref={chatpage} onClick={()=>{
@@ -139,7 +140,7 @@ const Mypage = (props) => {
                 {props.page === 1 && <Categroy/>}
                 {props.page === 2 && <Log title={title} category={category} name={name} setAnswer={setAnswer} setChat={setChat} setPage={props.setPage} page={props.page}/>}
                 {props.page === 3 && <Myinfo id={id} pw={pw} name={name}/>}
-                {loading && <Loading/>}
+                {props.upload === 0 ? <Loading/> : console.log('처리 완료')}
             </Wrapper>
         </>
     )

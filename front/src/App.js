@@ -15,9 +15,10 @@ Modal.setAppElement('#root');
 
 function App() {
     const [filename, setFilename] = useState()
-    const [upload, setUpload] = useState()
+    const [upload, setUpload] = useState(0)
     const [userlogin, setUserlogin] = useState()
     const [page, setPage] = useState(0);
+    const [summary, setSummary] = useState();
     return (
         <BrowserRouter>
             <div className="App">
@@ -25,10 +26,10 @@ function App() {
                     <Route path='/main' element={<Main setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
                     <Route path='/login' element={<Login userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
                     <Route path='/chat' element={<Chat filename={filename} upload={upload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
-                    <Route path='/' element={<Home setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
+                    <Route path='/' element={<Home setSummary={setSummary} setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
                     <Route path='/join' element={<Join/>}/>
                     <Route path='/board' element={<Board/>}/>
-                    <Route path='/mypage' element={<Mypage page={page} setPage={setPage}/>}/>
+                    <Route path='/mypage' element={<Mypage upload={upload} setUpload={setUpload} page={page} setPage={setPage}/>}/>
                     <Route path='/loading' element={<Loading/>}/>
                 </Routes>
             </div>

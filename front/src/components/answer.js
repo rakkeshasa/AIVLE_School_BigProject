@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
-import ReactPlayer from 'react-player/lazy';
 
 const AnswerWrapper = styled.div`
     width: 90%;
@@ -116,27 +115,11 @@ const Answer = ({text}) => {
         }
       }, [text]);
 
-      
-      const handleVideo = () => {
-        document.querySelector('.react-player').style.display = 'none'
-      }
     return(
         <>
             <AnswerWrapper>
                 <AnswerBox ref={answertxt}>
                 <Loading01 display={animate ? 'none' : 'block'}/><Loading02 display={animate ? 'none' : 'block'}/><Loading03 display={animate ? 'none' : 'block'}/><Loading04 display={animate ? 'none' : 'block'}/>{text}</AnswerBox>
-                <ReactPlayer
-                className='react-player'
-                url={'videos/ttt.mp4'}    // 플레이어 url
-                width='500px'         // 플레이어 크기 (가로)
-                height='300px'        // 플레이어 크기 (세로)
-                playing={true}        // 자동 재생 on
-                muted={true}          // 자동 재생 on
-                controls={true}       // 플레이어 컨트롤 노출 여부
-                light={false}         // 플레이어 모드
-                pip={true}            // pip 모드 설정 여부
-                onEnded={() => handleVideo()}  // 플레이어 끝났을 때 이벤트
-                />
             </AnswerWrapper>
         </>
     );

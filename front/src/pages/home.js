@@ -119,6 +119,7 @@ const LoginBox = styled.div`
     color: white;
     margin-top: 17px;
     margin-right: 10px;
+    font-size: 13px;
     &:hover {
         cursor: pointer;
         background-color: #D94925;

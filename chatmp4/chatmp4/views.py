@@ -1,3 +1,4 @@
+import shutil
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -135,9 +136,9 @@ def videoUpload(request):
         # total_summary = summary_kobart(st)
         # print(total_summary)
 
-        translation_s = translate_client.translate(total_summary, target_language='ko') #텍스트 한국어로 번역
-        translated_text_s = translation['translation_s']
-        print(translated_text_s)
+        # translation_s = translate_client.translate(total_summary, target_language='ko') #텍스트 한국어로 번역
+        # translated_text_s = translation['translation_s']
+        # print(translated_text_s)
 
         # category
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -184,7 +185,7 @@ def videoUpload(request):
         if os.path.exists(db_directory):
             shutil.rmtree(db_directory)
         
-        return HttpResponse('file upload ok')
+        return HttpResponse('ok')
 
 # 회원가입
 @csrf_exempt
@@ -275,17 +276,18 @@ def video2chat(request):
 
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
 
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     # return HttpResponse(res)
     # db에 question , answer 에 / 붙여서 넣기
-
+    
     if output_video :
         if '보여줘' in q:
-            print(output_video[0])
-    else : print('찾는 내용이 없습니다.')
+            videoResult = output_video[0]
+        else : videoResult = ''
+    else : videoResult = '찾는 내용이 없습니다.'
 
 
     db_qa = Video.objects.get(video_id = video_id)
@@ -306,5 +308,10 @@ def video2chat(request):
     video.question = q
     video.answer = ans
     video.save()
+    
+    response = {
+        'answer': res,
+        'video' : videoResult,  
+    }
 
-    return HttpResponse(res)
+    return JsonResponse(response)
