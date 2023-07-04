@@ -18,18 +18,19 @@ function App() {
     const [upload, setUpload] = useState(0)
     const [userlogin, setUserlogin] = useState()
     const [page, setPage] = useState(0);
-    const [summary, setSummary] = useState();
+    const [videoSummary, setVideoSummary] = useState();
+   
     return (
         <BrowserRouter>
             <div className="App">
                 <Routes>
                     <Route path='/main' element={<Main setFilename={setFilename} filename={filename} setUpload={setUpload}/>}/>
                     <Route path='/login' element={<Login userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
-                    <Route path='/chat' element={<Chat filename={filename} upload={upload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
-                    <Route path='/' element={<Home setSummary={setSummary} setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
+                    <Route path='/chat' element={<Chat videoSummary={videoSummary} filename={filename} upload={upload} userlogin={userlogin} setUserlogin={setUserlogin}/>}/>
+                    <Route path='/' element={<Home videoSummary={videoSummary} setVideoSummary={setVideoSummary} setFilename={setFilename} filename={filename} setUpload={setUpload} userlogin={userlogin} setUserlogin={setUserlogin} setPage={setPage}/>}/>
                     <Route path='/join' element={<Join/>}/>
                     <Route path='/board' element={<Board/>}/>
-                    <Route path='/mypage' element={<Mypage upload={upload} setUpload={setUpload} page={page} setPage={setPage}/>}/>
+                    <Route path='/mypage' element={<Mypage videoSummary={videoSummary} upload={upload} setUpload={setUpload} page={page} setPage={setPage} />}/>
                     <Route path='/loading' element={<Loading/>}/>
                 </Routes>
             </div>

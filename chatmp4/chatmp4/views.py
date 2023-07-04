@@ -193,9 +193,11 @@ def videoUpload(request):
         if os.path.exists(db_directory):
             print('$##############됐다')
             shutil.rmtree(db_directory)
-        
-        data = {'summary' : st}
-    return JsonResponse(data)
+
+        response = {
+            'summary' : st+'finish'
+        }
+        return JsonResponse(response)
 
 # 회원가입
 @csrf_exempt

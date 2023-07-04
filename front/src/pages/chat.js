@@ -9,9 +9,10 @@ function Chat(props) {
     const [filenames, setFilenames] = useState([props.filename]);
     const [video, setvideo] = useState('1');
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+    console.log(props.videoSummary);
     return (
         <div className='chat-wrapper'>
-            <Chatting setAnswer={props.setAnswer} answer={props.answer} chat={props.chat} video={video}/>
+            <Chatting  videoSummary={props.videoSummary} upload={props.upload} setAnswer={props.setAnswer} answer={props.answer} chat={props.chat} video={video}/>
             <div className='question-wrapper'><div className='question-box'><input type='textarea' id='chat-question' 
             onKeyUp={(e)=>{
                 e.target.value === ''? document.querySelector('.submit-button').classList.remove('active') : document.querySelector('.submit-button').classList.add('active');

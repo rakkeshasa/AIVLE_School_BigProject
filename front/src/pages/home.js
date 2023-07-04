@@ -132,7 +132,6 @@ const Home = (props) => {
     const [seccond, setSeccond] = useState(false);
     const [third, setThird] = useState(false);
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
   
@@ -151,7 +150,6 @@ const Home = (props) => {
         setThird(true);
       }
     };
-
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
     
@@ -218,6 +216,7 @@ const Home = (props) => {
                     const formData = new FormData()
                     formData.append('video', e.currentTarget.files[0])
                     formData.append('title', 'title')
+                    // 비디오 업로드 시 요약 ==> 요약 변수에 들어가지 않음!!
                     axios({
                         headers: {
                             "Content-Type": "multipart/form-data" // enctype 설정
@@ -225,7 +224,17 @@ const Home = (props) => {
                         method: 'post',
                         url: 'http://127.0.0.1:8000/video',
                         data: formData,
-                    }).then(res => res ? props.setUpload(1) : props.setUpload(0))
+                    }).then(res =>
+                        {
+                        if (res.data.summary.includes('finish')) {
+                            const summaryText = res.data.summary
+                            props.setVideoSummary(summaryText)
+                            props.setUpload(1);
+                          } else {
+                            props.setUpload(0);
+                          }
+                      }
+                      )
                     props.setFilename(e.currentTarget.files[0].name);
                     props.setPage(0)
                     navi('/mypage')
