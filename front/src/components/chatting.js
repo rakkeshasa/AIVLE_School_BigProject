@@ -4,7 +4,7 @@ import Answer from "./answer";
 import { useEffect } from "react";
 import { useRef } from "react";
 import Video from "./video";
-
+import Summary from "./summary";
 
 
 const Chatting = (props) => {
@@ -24,6 +24,7 @@ const Chatting = (props) => {
 
     return(
         <div className='chat-box'>
+            {props.upload === 1 && <Summary videoSummary={props.videoSummary}/>}
             <button className="to-bottom-btn" onClick={()=>{autoScroll()}}>
             </button>
             {props.chat.map((question, index) => (

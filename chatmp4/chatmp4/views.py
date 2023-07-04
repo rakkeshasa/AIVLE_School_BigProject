@@ -128,10 +128,9 @@ def videoUpload(request):
             with open(os.path.join(list_dir,text),'r', encoding='utf-8') as f:
                 txt = f.read()
                 sm_txt = summary_kobart(txt)
-                # summary_lst.append(sm_txt)
-                print(sm_txt)
-        
-        # st = ''.join(summary_lst)
+                summary_lst.append(sm_txt)
+                st = ''.join(summary_lst)
+                print(st)
         # print(st)
         # total_summary = summary_kobart(st)
         # print(total_summary)
@@ -184,8 +183,11 @@ def videoUpload(request):
 
         if os.path.exists(db_directory):
             shutil.rmtree(db_directory)
-        
-        return HttpResponse('ok')
+
+        response = {
+            'summary' : st+'finish'
+        }
+        return JsonResponse(response)
 
 # 회원가입
 @csrf_exempt
