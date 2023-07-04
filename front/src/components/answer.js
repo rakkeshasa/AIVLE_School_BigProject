@@ -114,11 +114,12 @@ const Answer = ({text}) => {
             setAnimate(false);
         }
       }, [text]);
-    
+
     return(
         <>
             <AnswerWrapper>
-                <AnswerBox ref={answertxt}><Loading01 display={animate ? 'none' : 'block'}/><Loading02 display={animate ? 'none' : 'block'}/><Loading03 display={animate ? 'none' : 'block'}/><Loading04 display={animate ? 'none' : 'block'}/>{text}</AnswerBox>
+                <AnswerBox ref={answertxt}>
+                <Loading01 display={animate ? 'none' : 'block'}/><Loading02 display={animate ? 'none' : 'block'}/><Loading03 display={animate ? 'none' : 'block'}/><Loading04 display={animate ? 'none' : 'block'}/>{text}</AnswerBox>
             </AnswerWrapper>
         </>
     );

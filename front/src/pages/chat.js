@@ -7,10 +7,11 @@ import axios from 'axios';
 function Chat(props) {
     let navi = useNavigate();
     const [filenames, setFilenames] = useState([props.filename]);
+    const [video, setvideo] = useState('1');
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     return (
         <div className='chat-wrapper'>
-            <Chatting answer={props.answer} chat={props.chat}/>
+            <Chatting setAnswer={props.setAnswer} answer={props.answer} chat={props.chat} video={video}/>
             <div className='question-wrapper'><div className='question-box'><input type='textarea' id='chat-question' 
             onKeyUp={(e)=>{
                 e.target.value === ''? document.querySelector('.submit-button').classList.remove('active') : document.querySelector('.submit-button').classList.add('active');
@@ -25,8 +26,12 @@ function Chat(props) {
                     data: {
                         'question': document.querySelector('#chat-question').value,
                     }
-                }).then(res=>{
-                props.setAnswer([...props.answer, res.data])})
+                }).then((res)=>{
+                    props.setAnswer([...props.answer, res.data.answer])
+                    if(res.data.videoResult !== ''){
+                        setvideo(res.data.videoResult)
+                    }
+            })
                 document.querySelector('#chat-question').value = '';
             }}><span class="material-symbols-outlined">
             send

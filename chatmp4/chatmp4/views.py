@@ -1,3 +1,4 @@
+import shutil
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -280,11 +281,12 @@ def video2chat(request):
     # return JsonResponse({'result': res, 'message': '답변 성공'})
     # return HttpResponse(res)
     # db에 question , answer 에 / 붙여서 넣기
-
+    
     if output_video :
         if '보여줘' in q:
-            print(output_video[0])
-    else : print('찾는 내용이 없습니다.')
+            videoResult = output_video[0]
+        else : videoResult = ''
+    else : videoResult = '찾는 내용이 없습니다.'
 
 
     db_qa = Video.objects.get(video_id = video_id)
@@ -305,5 +307,10 @@ def video2chat(request):
     video.question = q
     video.answer = ans
     video.save()
+    
+    response = {
+        'answer': res,
+        'video' : videoResult,  
+    }
 
-    return HttpResponse(res)
+    return JsonResponse(response)

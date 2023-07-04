@@ -19,7 +19,9 @@ const QuestionBox = styled.div`
     color: #5B5B5B;
     font-family: 'Inter';
 `
+
 const Question = ({text}) => {
+
     return(
         <>  
             <QuestionWrapper>
