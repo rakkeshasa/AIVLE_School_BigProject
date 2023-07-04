@@ -61,7 +61,7 @@ const Categroy = (props) => {
   legend: {
     show: true,
     floating: true,
-    fontSize: '10px',
+    fontSize: '13px',
     position: 'left',
     offsetX: 140,
     offsetY: 15,
@@ -105,7 +105,7 @@ const Categroy = (props) => {
 
   const option02 = {
     series: [{
-    data: [21, 22, 10, 28, 16, 21, 13, 30]
+    data: props.categorytotalcount
   }],
     chart: {
     height: 350,
@@ -130,16 +130,17 @@ const Categroy = (props) => {
     show: false
   },
   xaxis: {
-    categories: [
-      ['John', 'Doe'],
-      ['Joe', 'Smith'],
-      ['Jake', 'Williams'],
-      'Amber',
-      ['Peter', 'Brown'],
-      ['Mary', 'Evans'],
-      ['David', 'Wilson'],
-      ['Lily', 'Roberts'], 
-    ],
+    // categories: [
+    //   ['John', 'Doe'],
+    //   ['Joe', 'Smith'],
+    //   ['Jake', 'Williams'],
+    //   'Amber',
+    //   ['Peter', 'Brown'],
+    //   ['Mary', 'Evans'],
+    //   ['David', 'Wilson'],
+    //   ['Lily', 'Roberts'], 
+    // ],
+    categories: props.categorytotaldata,
     labels: {
       style: {
         colors: [],
@@ -149,6 +150,8 @@ const Categroy = (props) => {
   }
   };
   console.log(props.categorycount);
+  console.log(props.categorytotaldata);
+  console.log(props.categorytotalcount);
 
     return(
         <>

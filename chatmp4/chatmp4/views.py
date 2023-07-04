@@ -85,7 +85,7 @@ def videoUpload(request):
 
         # video_file, result 폴더 내 파일 삭제
         current_directory = os.path.dirname(os.path.abspath(__file__)) 
-        video_directory = os.path.join(current_directory,'..','client','videos','output')
+        video_directory = os.path.join(current_directory,'..','client','static','videos','output')
         text_directory = os.path.join(current_directory, 'test_file', 'text_file', 'result')
         
         # 디렉토리 내의 모든 파일 삭제
@@ -101,19 +101,17 @@ def videoUpload(request):
             if os.path.isfile(remove_path):
                 os.remove(remove_path)
 
-
         # 동영상 학습
-        current_directory = os.path.dirname(os.path.abspath(__file__))
         input_path = os.path.join(file_path) # 비디오 경로 수정
-        output_path = os.path.join(current_directory,'..','client','videos','output')
+        output_path = os.path.join(current_directory,'..','client','static','videos','output')
         tt = video_split_model.get_video_duration(input_path)
-        video_split_model.split_video(input_path, output_path, tt, 180)
+        video_split_model.split_video(input_path, output_path, tt, 60)
         print('split success')
 
         # stt
-        chatmp4_files = os.listdir(os.path.join(current_directory,'..','client','videos','output'))
+        chatmp4_files = os.listdir(os.path.join(current_directory,'..','client','static','videos','output'))
         for chatmp4_file in chatmp4_files:
-            input_path = os.path.join(current_directory,'..','client','videos','output', chatmp4_file)
+            input_path = os.path.join(current_directory,'..','client','static','videos','output', chatmp4_file)
             output_name = os.path.splitext(chatmp4_file)[0]
             output_path = os.path.join(current_directory,'test_file','text_file','result',f'{output_name}.txt')
 
@@ -131,7 +129,15 @@ def videoUpload(request):
                 sm_txt = summary_kobart(txt)
                 summary_lst.append(sm_txt)
                 st = ''.join(summary_lst)
+
         print(st)
+        print("$$$$$$$$$$$$$$$$$$$$$$$$$$$4")
+        # 번역 기능
+        translate_client = translate_v2.Client()
+        translation_s = translate_client.translate(st, target_language='ko')
+        translated_text_s = translation_s['translatedText']
+        print(translated_text_s)
+
         # st = ''.join(summary_lst)
         # print(st)
         # total_summary = summary_kobart(st)
@@ -149,7 +155,7 @@ def videoUpload(request):
         subject.text_combine(input, output)
 
         # 번역 클라이언트를 인스턴스화
-        translate_client = translate_v2.Client()
+        # translate_client = translate_v2.Client()
         file_path = os.path.join(current_directory, 'test_file','text_file','combine','temp.txt') # txt 경로
         with open(file_path, 'r', encoding='utf-8') as file:
             text = file.read()
@@ -181,9 +187,11 @@ def videoUpload(request):
         request.session.pop('uploaded_video_id', None)
         request.session['uploaded_video_id'] = video.video_id
         
-        db_directory = os.path.join(current, 'db')
+        db_directory = os.path.join(current_directory,'db')
 
+        print('$##############삭제')
         if os.path.exists(db_directory):
+            print('$##############됐다')
             shutil.rmtree(db_directory)
         
         data = {'summary' : st}
@@ -244,6 +252,8 @@ def getChat(request):
 
 def getCategory(request):
     user_id = request.session.get('user_id')
+
+    # 개인 카테고리
     video_statistics = (
         Video.objects.filter(id=user_id)
         .values('category')
@@ -255,10 +265,29 @@ def getCategory(request):
     counts = [item['category_count'] for item in video_statistics]
     print(categories, counts)
 
+
+    # 전체 카테고리
+    most_common_category = (
+        Video.objects.values('category')
+        .annotate(category_count=Count('category'))
+        .order_by('-category_count')
+    )
+
+    if most_common_category:
+        category = [item['category'] for item in most_common_category]
+        category_count = [item['category_count'] for item in most_common_category]
+    else:
+        category = None
+        category_count = 0
+
+    print(category, category_count)
+
     data = {
         'user_id': user_id,
         'categories': categories,
-        'counts': counts
+        'counts': counts,
+        'total_categories': category,
+        'total_counts': category_count
     }
     return JsonResponse(data)
 
@@ -287,6 +316,8 @@ def video2chat(request):
             videoResult = output_video[0]
         else : videoResult = ''
     else : videoResult = '찾는 내용이 없습니다.'
+
+    print(videoResult)
 
 
     db_qa = Video.objects.get(video_id = video_id)

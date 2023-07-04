@@ -26,10 +26,10 @@ function Chat(props) {
                     data: {
                         'question': document.querySelector('#chat-question').value,
                     }
-                }).then((res)=>{
+                }).then(res=>{
                     props.setAnswer([...props.answer, res.data.answer])
-                    if(res.data.videoResult !== ''){
-                        setvideo(res.data.videoResult)
+                    if(res.data.video !== ''){
+                        setvideo(res.data.video)
                     }
             })
                 document.querySelector('#chat-question').value = '';

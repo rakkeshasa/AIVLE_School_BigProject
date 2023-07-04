@@ -14,12 +14,13 @@ const Video = (props) => {
     const handleVideo = () => {
         document.querySelector('.react-player').style.display = 'none'
       }
+      console.log(props.video)
     return(
         <>
             <VideoBox>
                 <ReactPlayer
                     className='react-player'
-                    url={'https://youtube.com/shorts/YHMExeXzhwo?feature=share'}
+                    url={props.video}
                     // url={props.video}    // 플레이어 url
                     width='500px'         // 플레이어 크기 (가로)
                     height='300px'        // 플레이어 크기 (세로)
