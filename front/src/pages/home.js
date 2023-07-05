@@ -119,6 +119,7 @@ const LoginBox = styled.div`
     color: white;
     margin-top: 17px;
     margin-right: 10px;
+    font-size: 13px;
     &:hover {
         cursor: pointer;
         background-color: #D94925;
@@ -131,7 +132,6 @@ const Home = (props) => {
     const [seccond, setSeccond] = useState(false);
     const [third, setThird] = useState(false);
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
-
     const handleScroll = () => {
       const scrollTop = window.pageYOffset;
   
@@ -150,7 +150,6 @@ const Home = (props) => {
         setThird(true);
       }
     };
-
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
     
@@ -165,7 +164,7 @@ const Home = (props) => {
             <UploadBox onClick={()=>{
                     isLoggedIn ? document.getElementById('upload').click() : alert('로그인 하세요')
                 }}>비디오 업로드 하기</UploadBox>
-            <NaviBar><Logo imageUrl={logoImg}/>
+            <NaviBar><Logo imageUrl={logoImg} onClick={()=>{navi('/')}}/>
                 <div className="home-top-btn-container">
                     <LoginBox onClick={()=>{
                         if(isLoggedIn){
@@ -217,6 +216,7 @@ const Home = (props) => {
                     const formData = new FormData()
                     formData.append('video', e.currentTarget.files[0])
                     formData.append('title', 'title')
+                    // 비디오 업로드 시 요약 ==> 요약 변수에 들어가지 않음!!
                     axios({
                         headers: {
                             "Content-Type": "multipart/form-data" // enctype 설정
@@ -224,7 +224,18 @@ const Home = (props) => {
                         method: 'post',
                         url: 'http://127.0.0.1:8000/video',
                         data: formData,
-                    }).then(res => res ? props.setUpload(1) : props.setUpload(0))
+                    }).then(res =>
+                        {
+                        if (res.data.summary) {
+                            const summaryText = res.data.summary
+                            console.log(summaryText);
+                            props.setVideoSummary(summaryText)
+                            props.setUpload(1);
+                          } else {
+                            props.setUpload(0);
+                          }
+                      }
+                      )
                     props.setFilename(e.currentTarget.files[0].name);
                     props.setPage(0)
                     navi('/mypage')

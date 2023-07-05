@@ -27,11 +27,10 @@ const TextBox = styled.div`
     font-family: 'Nanum Gothic', sans-serif;
 `
   
-const Categroy = () => {
+const Categroy = (props) => {
 
-        
   const option = {
-    series: [76, 67, 61, 90],
+    series: props.categorycount,
     chart: {
     height: 390,
     type: 'radialBar',
@@ -58,11 +57,11 @@ const Categroy = () => {
     }
   },
   colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
-  labels: ['Vimeo', 'Messenger', 'Facebook', 'LinkedIn'],
+  labels: props.categorydata,
   legend: {
     show: true,
     floating: true,
-    fontSize: '10px',
+    fontSize: '13px',
     position: 'left',
     offsetX: 140,
     offsetY: 15,
@@ -106,7 +105,7 @@ const Categroy = () => {
 
   const option02 = {
     series: [{
-    data: [21, 22, 10, 28, 16, 21, 13, 30]
+    data: props.categorytotalcount
   }],
     chart: {
     height: 350,
@@ -131,16 +130,17 @@ const Categroy = () => {
     show: false
   },
   xaxis: {
-    categories: [
-      ['John', 'Doe'],
-      ['Joe', 'Smith'],
-      ['Jake', 'Williams'],
-      'Amber',
-      ['Peter', 'Brown'],
-      ['Mary', 'Evans'],
-      ['David', 'Wilson'],
-      ['Lily', 'Roberts'], 
-    ],
+    // categories: [
+    //   ['John', 'Doe'],
+    //   ['Joe', 'Smith'],
+    //   ['Jake', 'Williams'],
+    //   'Amber',
+    //   ['Peter', 'Brown'],
+    //   ['Mary', 'Evans'],
+    //   ['David', 'Wilson'],
+    //   ['Lily', 'Roberts'], 
+    // ],
+    categories: props.categorytotaldata,
     labels: {
       style: {
         colors: [],
@@ -149,6 +149,9 @@ const Categroy = () => {
     }
   }
   };
+  console.log(props.categorycount);
+  console.log(props.categorytotaldata);
+  console.log(props.categorytotalcount);
 
     return(
         <>

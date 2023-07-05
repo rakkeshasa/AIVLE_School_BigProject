@@ -22,6 +22,9 @@ const Logo = styled.div`
   background-repeat: no-repeat;
   background-size: 60%;
   background-position: center;
+  &:hover{
+    cursor: pointer;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -239,12 +242,36 @@ const Board = () => {
     }
   };
 
+  const createComment = async (postId) => {
+    if(!newPost.title || !newPost.text){
+      alert("제목과 내용을 입력해주세요.");
+      return;
+    }
+    console.log(sessionStorage);
+    
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/blog/comment', {
+        id2: id2,
+        title: newPost.title,
+        text: newPost.text
+      });
+      console.log(response.data); // 생성된 게시물 데이터 출력
+      // 모달 닫기 및 초기화
+      closeModal();
+      const fetchResponse = await axios.get('http://127.0.0.1:8000/blog/get_post');
+      const updatedPosts = fetchResponse.data;
+      setPosts(updatedPosts);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   return (
     <>
       <Wrapper>
         <NaviBar>
-          <Logo imageUrl={logoImg} />
+          <Logo imageUrl={logoImg} onClick={()=>{navi('/')}}/>
           <div className="home-top-btn-container">
             {isLoggedIn && (
               <>
@@ -272,9 +299,16 @@ const Board = () => {
           <PostList>
             {posts.map((post) => (
               <PostItem key={post.id}>
-                <PostTitle onClick={() => togglePostContent(post.id)}>{post.title} {post.writer}</PostTitle>
+                <PostTitle onClick={() => togglePostContent(post.id)}>{post.title}{post.writer}</PostTitle>
                   <PostContent isExpanded={post.id === expandedPostId}>
                     {post.text}
+                    <Input
+                      type="text"
+                      name="title"
+                      value={newPost.title}
+                      onChange={handleInputChange}
+                      placeholder="댓글"
+                    /><Button onClick={createComment}>작성</Button>
                   </PostContent>
                   {isLoggedIn && <Button onClick={() => deletePost(post.id)}>delete</Button>}
               </PostItem>
@@ -311,7 +345,6 @@ const Board = () => {
               </div>
             </div>
           </CustomModal>
-          
 
         </BoardContainer>
       </Wrapper>
