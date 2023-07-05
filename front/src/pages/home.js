@@ -226,8 +226,9 @@ const Home = (props) => {
                         data: formData,
                     }).then(res =>
                         {
-                        if (res.data.summary.includes('finish')) {
+                        if (res.data.summary) {
                             const summaryText = res.data.summary
+                            console.log(summaryText);
                             props.setVideoSummary(summaryText)
                             props.setUpload(1);
                           } else {

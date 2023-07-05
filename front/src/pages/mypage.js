@@ -144,7 +144,7 @@ const Mypage = (props) => {
                     <span class="material-symbols-outlined" id="myinfo">demography</span>
                     </IconWrapper>
                 </MyPageLeftBar>
-                {props.page === 0 && <Chat videoSummary={props.videoSummary} answer={answer} setAnswer={setAnswer} chat={chat} setChat={setChat} />}
+                {props.page === 0 && <Chat videoSummary={props.videoSummary} answer={answer} setAnswer={setAnswer} chat={chat} setChat={setChat} upload={props.upload}/>}
                 {props.page === 1 && <Categroy categorydata={categorydata} categorycount={categorycount} categorytotalcount = {categorytotalcount} categorytotaldata = {categorytotaldata}/>}
                 {props.page === 2 && <Log title={title} category={category} name={name} setAnswer={setAnswer} setChat={setChat} setPage={props.setPage} page={props.page}/>}
                 {props.page === 3 && <Myinfo id={id} pw={pw} name={name}/>}
