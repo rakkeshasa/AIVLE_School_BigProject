@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const AnswerWrapper = styled.div`
+export const AnswerWrapper = styled.div`
     width: 90%;
     height: auto;
     display: flex;

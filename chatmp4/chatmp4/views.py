@@ -185,7 +185,7 @@ def videoUpload(request):
             shutil.rmtree(db_directory)
 
         response = {
-            'summary' : st+'finish'
+            'summary' : st
         }
         return JsonResponse(response)
 
@@ -289,7 +289,6 @@ def video2chat(request):
         if '보여줘' in q:
             videoResult = output_video[0]
         else : videoResult = ''
-    else : videoResult = '찾는 내용이 없습니다.'
 
 
     db_qa = Video.objects.get(video_id = video_id)

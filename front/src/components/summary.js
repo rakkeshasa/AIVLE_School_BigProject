@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { AnswerWrapper } from "./answer";
 
 const SummaryBox = styled.div`
     display: flex;
@@ -16,9 +17,12 @@ const SummaryBox = styled.div`
     font-family: 'Inter';
 `
 const Summary = (props) => {
+    console.log(props.videoSummary);
     return(
         <>
-            <SummaryBox>영상에 대한 요악입니다! <br></br> {props.videoSummary}</SummaryBox>
+            <AnswerWrapper>
+                <SummaryBox>영상에 대한 요약입니다! <br></br> {props.videoSummary}</SummaryBox>
+            </AnswerWrapper>
         </>
     )
 }

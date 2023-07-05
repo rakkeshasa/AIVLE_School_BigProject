@@ -7,7 +7,7 @@ import axios from 'axios';
 function Chat(props) {
     let navi = useNavigate();
     const [filenames, setFilenames] = useState([props.filename]);
-    const [video, setvideo] = useState('1');
+    const [video, setvideo] = useState();
     const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
     console.log(props.videoSummary);
     return (
@@ -30,7 +30,8 @@ function Chat(props) {
                 }).then((res)=>{
                     props.setAnswer([...props.answer, res.data.answer])
                     if(res.data.video !== ''){
-                        setvideo(res.data.video)
+                        const videoUrl = res.data.video
+                        setvideo(videoUrl)
                     }
             })
                 document.querySelector('#chat-question').value = '';
