@@ -86,6 +86,27 @@ def create_post(request):
     }
     return JsonResponse(context)
 
+    
+@csrf_exempt
+def create_comment(request):
+    data = json.loads(request.body)
+    id2 = data['id2']
+    comment = data['comment']
+    post = data['postId']
+
+    try:
+        user = User.objects.get(id=id2)  # 해당 id2 값을 가진 사용자의 User 인스턴스를 가져옵니다.
+    except User.DoesNotExist:
+        return JsonResponse({'status': '존재하지 않는 사용자입니다.'})
+
+    try:
+        post = Post.objects.get(id=post)  # 해당 id2 값을 가진 사용자의 User 인스턴스를 가져옵니다.
+    except Post.DoesNotExist:
+        return JsonResponse({'status': '존재하지 않는 사용자입니다.'})
+    comment = Comment(blog = post, author=user.username, comment=comment)  # User 인스턴스를 할당하여 게시물을 생성합니다.
+    comment.save()
+
+
 @csrf_exempt
 def delete_post(request, postId):
     data = json.loads(request.body)

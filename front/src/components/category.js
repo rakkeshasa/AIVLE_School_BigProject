@@ -27,67 +27,84 @@ const TextBox = styled.div`
     font-family: 'Nanum Gothic', sans-serif;
 `
   
-const Categroy = () => {
+const Categroy = (props) => {
 
-        
   const option = {
-    series: [76, 67, 61, 90],
+    series: props.categorycount,
     chart: {
-    height: 390,
-    type: 'radialBar',
+    type: 'donut',
   },
-  plotOptions: {
-    radialBar: {
-      offsetY: 0,
-      startAngle: 30,
-      endAngle: 270,
-      hollow: {
-        margin: 5,
-        size: '30%',
-        background: 'transparent',
-        image: undefined,
-      },
-      dataLabels: {
-        name: {
-          show: false,
-        },
-        value: {
-          show: false,
-        }
-      }
-    }
-  },
-  colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
-  labels: ['Vimeo', 'Messenger', 'Facebook', 'LinkedIn'],
-  legend: {
-    show: true,
-    floating: true,
-    fontSize: '10px',
-    position: 'left',
-    offsetX: 140,
-    offsetY: 15,
-    labels: {
-      useSeriesColors: true,
-    },
-    markers: {
-      size: 0
-    },
-    formatter: function(seriesName, opts) {
-      return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
-    },
-    itemMargin: {
-      vertical: 3
-    }
-  },
+  labels: props.categorydata,
   responsive: [{
     breakpoint: 480,
     options: {
+      chart: {
+        width: 200
+      },
       legend: {
-          show: false
+        position: 'bottom'
       }
     }
   }]
   };
+  // const option = {
+  //   series: props.categorycount,
+  //   chart: {
+  //   height: 390,
+  //   type: 'radialBar',
+  // },
+  // plotOptions: {
+  //   radialBar: {
+  //     offsetY: 0,
+  //     startAngle: 30,
+  //     endAngle: 270,
+  //     hollow: {
+  //       margin: 5,
+  //       size: '30%',
+  //       background: 'transparent',
+  //       image: undefined,
+  //     },
+  //     dataLabels: {
+  //       name: {
+  //         show: false,
+  //       },
+  //       value: {
+  //         show: false,
+  //       }
+  //     }
+  //   }
+  // },
+  // colors: ['#1ab7ea', '#0084ff', '#39539E', '#0077B5'],
+  // labels: props.categorydata,
+  // legend: {
+  //   show: true,
+  //   floating: true,
+  //   fontSize: '13px',
+  //   position: 'left',
+  //   offsetX: 140,
+  //   offsetY: 15,
+  //   labels: {
+  //     useSeriesColors: true,
+  //   },
+  //   markers: {
+  //     size: 0
+  //   },
+  //   formatter: function(seriesName, opts) {
+  //     return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
+  //   },
+  //   itemMargin: {
+  //     vertical: 3
+  //   }
+  // },
+  // responsive: [{
+  //   breakpoint: 480,
+  //   options: {
+  //     legend: {
+  //         show: false
+  //     }
+  //   }
+  // }]
+  // };
 
   const colors = [
     '#3B93A5',
@@ -106,7 +123,7 @@ const Categroy = () => {
 
   const option02 = {
     series: [{
-    data: [21, 22, 10, 28, 16, 21, 13, 30]
+    data: props.categorytotalcount
   }],
     chart: {
     height: 350,
@@ -131,16 +148,17 @@ const Categroy = () => {
     show: false
   },
   xaxis: {
-    categories: [
-      ['John', 'Doe'],
-      ['Joe', 'Smith'],
-      ['Jake', 'Williams'],
-      'Amber',
-      ['Peter', 'Brown'],
-      ['Mary', 'Evans'],
-      ['David', 'Wilson'],
-      ['Lily', 'Roberts'], 
-    ],
+    // categories: [
+    //   ['John', 'Doe'],
+    //   ['Joe', 'Smith'],
+    //   ['Jake', 'Williams'],
+    //   'Amber',
+    //   ['Peter', 'Brown'],
+    //   ['Mary', 'Evans'],
+    //   ['David', 'Wilson'],
+    //   ['Lily', 'Roberts'], 
+    // ],
+    categories: props.categorytotaldata,
     labels: {
       style: {
         colors: [],
@@ -149,13 +167,16 @@ const Categroy = () => {
     }
   }
   };
+  console.log(props.categorycount);
+  console.log(props.categorytotaldata);
+  console.log(props.categorytotalcount);
 
     return(
         <>
             <Wrapper>
                 <ChartContainer>
                     <TextBox>사용자가 업로드 한 강의 카테고리</TextBox>
-                    <ApexCharts options={option} series={option.series} type="radialBar"  width={550} height={350}/>
+                    <ApexCharts options={option} series={option.series} type="donut"  width={550} height={350}/>
         </ChartContainer>
                 <ChartContainer>
                     <TextBox>Top 10 카테고리</TextBox>

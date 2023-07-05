@@ -164,7 +164,7 @@ const Home = (props) => {
             <UploadBox onClick={()=>{
                     isLoggedIn ? document.getElementById('upload').click() : alert('로그인 하세요')
                 }}>비디오 업로드 하기</UploadBox>
-            <NaviBar><Logo imageUrl={logoImg}/>
+            <NaviBar><Logo imageUrl={logoImg} onClick={()=>{navi('/')}}/>
                 <div className="home-top-btn-container">
                     <LoginBox onClick={()=>{
                         if(isLoggedIn){

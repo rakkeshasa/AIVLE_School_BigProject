@@ -53,6 +53,11 @@ const Mypage = (props) => {
     const [name, setName] = useState();
     const [answer, setAnswer] = useState([]);
     const [chat, setChat] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [categorydata, setCategorydata] = useState([]);
+    const [categorycount, setCategorycount] = useState([]);
+    const [categorytotaldata, setCategorytotaldata] = useState([]);
+    const [categorytotalcount, setCategorytotalcount] = useState([]);
     
     console.log(props.upload);
 
@@ -104,8 +109,11 @@ const Mypage = (props) => {
                     <TextWrapper ref={categorypage} onClick={()=>{
                         axios.get('http://127.0.0.1:8000/getCategory')
                         .then((res)=>{
-                            
-                        })
+                            setCategorydata(res.data.categories)
+                            setCategorycount(res.data.counts)
+                            setCategorytotaldata(res.data.total_categories)
+                            setCategorytotalcount(res.data.total_counts)
+                            })
                         props.setPage(1)}}>Category</TextWrapper>
                     <span class="material-symbols-outlined">category</span>
                     </IconWrapper>
@@ -137,7 +145,7 @@ const Mypage = (props) => {
                     </IconWrapper>
                 </MyPageLeftBar>
                 {props.page === 0 && <Chat videoSummary={props.videoSummary} answer={answer} setAnswer={setAnswer} chat={chat} setChat={setChat} upload={props.upload}/>}
-                {props.page === 1 && <Categroy/>}
+                {props.page === 1 && <Categroy categorydata={categorydata} categorycount={categorycount} categorytotalcount = {categorytotalcount} categorytotaldata = {categorytotaldata}/>}
                 {props.page === 2 && <Log title={title} category={category} name={name} setAnswer={setAnswer} setChat={setChat} setPage={props.setPage} page={props.page}/>}
                 {props.page === 3 && <Myinfo id={id} pw={pw} name={name}/>}
                 {props.upload === 0 ? <Loading/> : console.log('처리 완료')}

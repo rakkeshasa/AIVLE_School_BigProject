@@ -46,7 +46,6 @@ const LogContainer = styled.div`
     font-family: 'Nanum Gothic', sans-serif;
     color: #3E363F;
     overflow: scroll;
-    overflow: hidden;
 `
 
 const Log = (props) => {

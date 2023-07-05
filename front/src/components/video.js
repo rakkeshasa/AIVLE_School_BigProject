@@ -5,8 +5,6 @@ import { useRef } from "react";
 const VideoBox = styled.div`
     width: 100%;
     height: 500px;
-    border-top: dashed #E5E5E5;
-    border-bottom: dashed #E5E5E5;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -15,14 +13,15 @@ const Video = (props) => {
     const videdoBox = useRef();
     const handleVideo = () => {
         videdoBox.current.style.display = 'none'
-        props.setVideo('')
+        props.setvideo('')
       }
+      console.log(props.video)
     return(
         <>
             <VideoBox ref={VideoBox}>
                 <ReactPlayer
                     className='react-player'
-                    url={'https://youtube.com/shorts/YHMExeXzhwo?feature=share'}
+                    url={props.video}
                     // url={props.video}    // 플레이어 url
                     width='500px'         // 플레이어 크기 (가로)
                     height='300px'        // 플레이어 크기 (세로)

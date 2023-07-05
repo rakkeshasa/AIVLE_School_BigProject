@@ -16,5 +16,6 @@ urlpatterns = [
     path('mypageinfo', views.mypage),
     path('board/', TemplateView.as_view(template_name='index.html')),
     path('getLog', views.getLog),
-    path('getChat/', views.getChat, name='getChat')
+    path('getChat/', views.getChat, name='getChat'),
+    path('getCategory', views.getCategory, name='getCategory')
 ]
