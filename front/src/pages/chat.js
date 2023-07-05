@@ -32,6 +32,8 @@ function Chat(props) {
                     if(res.data.video !== ''){
                         const videoUrl = res.data.video
                         setvideo(videoUrl)
+                    }else {
+                        setvideo('')
                     }
             })
                 document.querySelector('#chat-question').value = '';
