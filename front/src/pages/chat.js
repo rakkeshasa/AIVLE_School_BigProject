@@ -12,7 +12,7 @@ function Chat(props) {
     console.log(props.videoSummary);
     return (
         <div className='chat-wrapper'>
-            <Chatting  videoSummary={props.videoSummary} upload={props.upload} setAnswer={props.setAnswer} answer={props.answer} chat={props.chat} video={video}/>
+            <Chatting  videoSummary={props.videoSummary} upload={props.upload} setAnswer={props.setAnswer} answer={props.answer} chat={props.chat} video={video} setvideo={setvideo}/>
             <div className='question-wrapper'><div className='question-box'><input type='textarea' id='chat-question' 
             onKeyUp={(e)=>{
                 e.target.value === ''? document.querySelector('.submit-button').classList.remove('active') : document.querySelector('.submit-button').classList.add('active');

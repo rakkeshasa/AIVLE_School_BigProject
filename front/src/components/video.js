@@ -15,6 +15,7 @@ const Video = (props) => {
     const videdoBox = useRef();
     const handleVideo = () => {
         videdoBox.current.style.display = 'none'
+        props.setVideo('')
       }
     return(
         <>

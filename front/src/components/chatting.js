@@ -33,7 +33,7 @@ const Chatting = (props) => {
             {props.chat.map((question, index) => (
           <>
             {/* {props.video !== '' && props.setAnswer(['질문에 대한 영상입니다.',...props.answer])} */}
-            {props.video === '' ? <Video video={props.video}/> : console.log(props.video)}
+            {props.video !== '' && <Video video={props.video}/>}
             {/* {props.video === '찾는 내용이 없습니다.' && props.setAnswer(['찾는 내용이 없습니다.',...props.answer])} */}
             <Question text={question}/>
             <Answer text={props.answer[index]} />
