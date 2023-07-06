@@ -18,7 +18,7 @@ def text_combine(input, output):
 
 def text_subject():
     # 인증 정보를 포함한 키 파일의 경로를 지정합니다.
-    key_path = '/content/logical-vim-391000-b24b3db4747b.json'
+    key_path = ''#google 키 경로
 
     # 번역 클라이언트를 인스턴스화합니다.
     translate_client = translate.Client.from_service_account_json(key_path)

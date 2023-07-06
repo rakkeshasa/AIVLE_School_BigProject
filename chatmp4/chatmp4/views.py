@@ -40,7 +40,7 @@ def login_view(request):
             return JsonResponse({
                 'status': True,
                 'session_id': request.session.get('user'),
-                'id2': request.session.get('id2'),
+                'id2': request.session.get('id2')
             })
         else:
             return JsonResponse({'status': '아이디 또는 비밀번호가 올바르지 않습니다.'})
@@ -105,7 +105,7 @@ def videoUpload(request):
         input_path = os.path.join(file_path) # 비디오 경로 수정
         output_path = os.path.join(current_directory,'..','client','static','videos','output')
         tt = video_split_model.get_video_duration(input_path)
-        video_split_model.split_video(input_path, output_path, tt, 60)
+        video_split_model.split_video(input_path, output_path, tt, 80)
         print('split success')
 
         # stt
@@ -135,8 +135,8 @@ def videoUpload(request):
         # 번역 기능
         translate_client = translate_v2.Client()
         translation_s = translate_client.translate(st, target_language='ko')
-        translated_text_s = translation_s['translatedText']
-        print(translated_text_s)
+        st = translation_s['translatedText']
+        print(st)
 
         # st = ''.join(summary_lst)
         # print(st)
@@ -306,7 +306,7 @@ def video2chat(request):
 
     q = str(data['question'])
     txt_path = os.path.join(current_directory, 'test_file','text_file','result')
-    res, output_video = chat_model.chat("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", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=1, message=q)
+    res, output_video = chat_model.chat("", isfirst=True, input_dir=txt_path, vectordb_dir=os.path.join(current_directory, 'db'), n=2, message=q)
 
     print('chat success')
     # return JsonResponse({'result': res, 'message': '답변 성공'})
@@ -339,6 +339,12 @@ def video2chat(request):
     video.question = q
     video.answer = ans
     video.save()
+
+    # 번역 기능
+    translate_client = translate_v2.Client()
+    translation_r = translate_client.translate(res, target_language='ko')
+    res = translation_r['translatedText']
+    print(res)
     
     response = {
         'answer': res,

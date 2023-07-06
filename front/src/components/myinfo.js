@@ -36,27 +36,16 @@ const ProfileText = styled.div`
     color: #3E363F;
     border-bottom: solid #E5E5E5;
 `
-const ProfilePw = styled.input.attrs({
-    type: 'password',
-  })`
-    font-family: 'Nanum Gothic', sans-serif;
-    width: 250px;
-    height: 30px;
-    text-align: left;
-    color: #3E363F;
-    outline: none;
-    border-bottom: solid #E5E5E5;
-  `;
 const Myinfo = (props) => {
     return(
         <>
             <Wrapper>
                 <Container>
                     <Profile imageUrl={ProfileImg}/>
+                    <ProfileText>VITA</ProfileText>
+                    <ProfileText>안녕하세요</ProfileText>
                     <ProfileText>ID</ProfileText>
                     <ProfileText>{props.id}</ProfileText>
-                    <ProfileText>PASSWORD</ProfileText>
-                    <ProfilePw value={props.pw}></ProfilePw>
                     <ProfileText>NAME</ProfileText>
                     <ProfileText>{props.name}</ProfileText>
             </Container>

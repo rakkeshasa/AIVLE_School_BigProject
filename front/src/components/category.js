@@ -15,11 +15,9 @@ const ChartContainer = styled.div`
       }
 `
 const TextBox = styled.div`
-    width: 30vw;
-    height: 80px;
+    width: 250px;
+    height: 50px;
     display: flex;
-    border: solid #E5E5E5;
-    background-color: #E3F2FD;
     color: #686963;
     border-radius: 20px;
     justify-content: center;
