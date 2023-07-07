@@ -5,6 +5,11 @@ from langchain.llms import OpenAI
 from langchain.chains import RetrievalQA
 from langchain.document_loaders import TextLoader
 from langchain.document_loaders import DirectoryLoader
+from langchain.chat_models import ChatOpenAI
+
+ 
+
+ 
 
 import os
 import openai
@@ -54,7 +59,7 @@ def chat(api_key, isfirst, input_dir, vectordb_dir, n, message):
     retriever = vectordb.as_retriever(search_kwargs={"k": n})
 
     qa_chain = RetrievalQA.from_chain_type(
-        llm=OpenAI(),
+        llm=ChatOpenAI(),
         chain_type="stuff",
         retriever=retriever,
         return_source_documents=True)

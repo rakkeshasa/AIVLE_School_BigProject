@@ -77,6 +77,9 @@ const PostItem = styled.li`
 `;
 
 const PostTitle = styled.h3`
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
   font-size: 1.5rem;
   color: #333333;
   cursor: pointer;
@@ -299,7 +302,7 @@ const Board = () => {
           <PostList>
             {posts.map((post) => (
               <PostItem key={post.id}>
-                <PostTitle onClick={() => togglePostContent(post.id)}>{post.title}{post.writer}</PostTitle>
+                <PostTitle onClick={() => togglePostContent(post.id)}><div>{post.title}</div><div>{post.writer}</div></PostTitle>
                   <PostContent isExpanded={post.id === expandedPostId}>
                     {post.text}
                     <Input
@@ -310,7 +313,7 @@ const Board = () => {
                       placeholder="댓글"
                     /><Button onClick={createComment}>작성</Button>
                   </PostContent>
-                  {isLoggedIn && <Button onClick={() => deletePost(post.id)}>delete</Button>}
+                  {/* {isLoggedIn && <Button onClick={() => deletePost(post.id)}>delete</Button>} */}
               </PostItem>
             ))}
           </PostList>
