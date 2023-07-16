@@ -13,7 +13,8 @@ VITA 간단한 소개
 
 핵심기능
 ---
-https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/0e0155a1-4a04-456d-b34d-247f0272d039
+![vita](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/0de90085-8cff-4177-882d-c6161d563465)
+
 </BR></BR>
 
 조원 역할
