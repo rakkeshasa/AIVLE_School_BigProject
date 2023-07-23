@@ -57,3 +57,17 @@ VITA 간단한 소개
 3) 영어로 된 텍스트 기반으로 주제를 분류함
 4) 내용과 관련된 주제를 3가지가 출력되고 그 중 관련성이 제일 높은 첫번째만 뽑아옴
 5) 내용에서 카테고리 추출이 힘들경우 'No category found'라고 출력됨. (예시: 침착맨 삼국지)
+
+DB 설계
+---
+- ERD 설계
+
+![image](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/eac184de-e1d6-40f0-99c6-4aa0c942dad3)
+
+- 최종 DB설계
+
+![3](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/d27eb0d0-8d38-4d0d-b660-4c785035af6c)
+
+1) User 엔티티는 Django의 내장 DB SQLite에 있는 기본 User엔티티 사용
+2) 나머지 엔티티들은 MYSQL DB로 설계 후 Django에 연동
+3) 기존에 있던 Log 엔티티는 POST 엔티티의 answer, question의 속성으로 포함시킴
