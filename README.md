@@ -63,6 +63,7 @@ DB 설계
 - ERD 설계
 
 ![image](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/eac184de-e1d6-40f0-99c6-4aa0c942dad3)
+</BR></BR>
 
 - 최종 DB설계
 
@@ -71,3 +72,20 @@ DB 설계
 1) User 엔티티는 Django의 내장 DB SQLite에 있는 기본 User엔티티 사용
 2) 나머지 엔티티들은 MYSQL DB로 설계 후 Django에 연동
 3) 기존에 있던 Log 엔티티는 POST 엔티티의 answer, question의 속성으로 포함시킴
+
+AWS 연동
+---
+- EC2 생성(탄력적IP 할당)
+
+![4](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/17a7c4ce-019c-4e7a-89ef-eda1bc6267ed)
+</BR></BR>
+
+- Django 파일 업로드
+
+![5](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/a97471fa-1109-4895-bcb4-381c4b4337f5)
+</BR></BR>
+
+- RDS 생성
+
+![6](https://github.com/rakkeshasa/AIVLE_School_BigProject/assets/77041622/96cf65d8-642b-4e65-9eb6-432a29be053b)
+</BR></BR>
